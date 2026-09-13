@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 35px) scale(0.92);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-45px, 40px) scale(1.08);
+  }
+  66% {
+    transform: translate(35px, -45px) scale(0.95);
+  }
+}
+
+@keyframes spin-ultra-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 26s ease-in-out infinite;
+}
+
+.animate-spin-ultra-slow {
+  animation: spin-ultra-slow 120s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+/* Pink and Blue atmospheric gradient backdrop */
+.bg-pink-blue-mesh {
+  background-color: #fcf4f8;
+  background-image: 
+    radial-gradient(at 5% 5%, rgba(244, 114, 182, 0.22) 0px, transparent 45%),
+    radial-gradient(at 95% 5%, rgba(56, 189, 248, 0.28) 0px, transparent 50%),
+    radial-gradient(at 95% 95%, rgba(244, 114, 182, 0.20) 0px, transparent 50%),
+    radial-gradient(at 5% 95%, rgba(14, 165, 233, 0.22) 0px, transparent 45%),
+    radial-gradient(at 50% 45%, rgba(253, 164, 175, 0.12) 0px, transparent 60%);
+  background-attachment: fixed;
+}
+
