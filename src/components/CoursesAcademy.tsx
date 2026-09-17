@@ -25,6 +25,7 @@ interface CoursesAcademyProps {
   onOpenCertificate: (course: Course) => void;
   onAwardXP: (amount: number, reason: string) => void;
   onAddCourse: (course: Course) => void;
+  currentRole?: string;
 }
 
 export const CoursesAcademy: React.FC<CoursesAcademyProps> = ({
@@ -32,8 +33,10 @@ export const CoursesAcademy: React.FC<CoursesAcademyProps> = ({
   onOpenCertificate,
   onAwardXP,
   onAddCourse,
+  currentRole = 'Trainee',
 }) => {
   const { isBright } = useTheme();
+  const isTrainerOrAdmin = currentRole === 'Trainer' || currentRole === 'Admin';
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const [activeQuizCourse, setActiveQuizCourse] = useState<Course | null>(null);
@@ -172,16 +175,26 @@ export const CoursesAcademy: React.FC<CoursesAcademyProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={() => {
-            sound.playBlip(700);
-            setIsNewCourseModalOpen(true);
-          }}
-          className="flex items-center gap-1.5 px-3.5 py-2 font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 self-start sm:self-auto bg-black hover:bg-neutral-800 text-white cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Publish New Course</span>
-        </button>
+        {isTrainerOrAdmin ? (
+          <button
+            type="button"
+            onClick={() => {
+              sound.playBlip(700);
+              setIsNewCourseModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 font-bold text-xs rounded-xl transition-all shadow-md shrink-0 self-start sm:self-auto bg-slate-900 hover:bg-slate-800 text-white cursor-pointer active:scale-95"
+            title="Faculty Publishing: Create and publish a new accredited course"
+          >
+            <Plus className="w-4 h-4 text-emerald-400" />
+            <span>Publish New Course</span>
+            <span className="px-1.5 py-0.5 rounded bg-white/20 text-[10px] font-mono">Faculty</span>
+          </button>
+        ) : (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-sky-200 bg-sky-50 text-sky-900 text-xs font-medium self-start sm:self-auto shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Cadet Enrolled Catalog</span>
+          </div>
+        )}
       </div>
 
       {/* Category Filter Pills */}

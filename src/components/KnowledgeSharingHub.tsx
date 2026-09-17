@@ -30,13 +30,18 @@ import confetti from 'canvas-confetti';
 interface KnowledgeSharingHubProps {
   onAwardXP?: (amount: number, reason: string) => void;
   currentUserRole?: string;
+  isExternalUploadOpen?: boolean;
+  onCloseExternalUpload?: () => void;
 }
 
 export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
   onAwardXP,
   currentUserRole = 'Trainee',
+  isExternalUploadOpen = false,
+  onCloseExternalUpload,
 }) => {
   const { isBright } = useTheme();
+  const isTrainer = currentUserRole === 'Trainer';
 
   const [activeSubTab, setActiveSubTab] = useState<'articles' | 'forum' | 'sops'>('articles');
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>(INITIAL_KNOWLEDGE_ITEMS);
@@ -49,6 +54,13 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
   const [selectedItemForReading, setSelectedItemForReading] = useState<KnowledgeItem | null>(null);
   const [isContributeModalOpen, setIsContributeModalOpen] = useState<boolean>(false);
   const [isNewQuestionModalOpen, setIsNewQuestionModalOpen] = useState<boolean>(false);
+
+  const showContributeModal = isTrainer && (isContributeModalOpen || isExternalUploadOpen);
+
+  const handleCloseContributeModal = () => {
+    setIsContributeModalOpen(false);
+    onCloseExternalUpload?.();
+  };
 
   // New Question form state
   const [questionTitle, setQuestionTitle] = useState('');
@@ -137,10 +149,10 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
       title: newTitle,
       category: newCategory,
       competencyDomain: newDomain,
-      authorName: currentUserRole === 'Admin' ? 'Dr. Ananya Sengupta' : 'Officer Cadet (Trainee)',
-      authorDesignation: currentUserRole === 'Admin' ? 'Director General / Scientific Admin' : 'Junior Forecaster & Trainee',
-      authorAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
-      stationOrInstitute: 'Regional Meteorological Centre (Capacity Connect Contributor)',
+      authorName: currentUserRole === 'Trainer' ? 'Dr. Someshwar Rao (Trainer)' : currentUserRole === 'Admin' ? 'Dr. Ananya Sengupta' : 'Officer Cadet (Trainee)',
+      authorDesignation: currentUserRole === 'Trainer' ? 'Senior Radar Faculty • IMD Training Center' : currentUserRole === 'Admin' ? 'Director General / Scientific Admin' : 'Junior Forecaster & Trainee',
+      authorAvatar: '',
+      stationOrInstitute: 'Regional Meteorological Centre (Capacity Connect Faculty Contributor)',
       publishedDate: 'Today',
       readTimeMinutes: Math.max(3, Math.ceil(newContent.split(' ').length / 180)),
       upvotes: 1,
@@ -149,7 +161,7 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
       summary: newSummary,
       contentMarkdown: newContent,
       tags: newTags.split(',').map(t => t.trim()),
-      isVerifiedIMD: currentUserRole === 'Admin' || currentUserRole === 'Trainer',
+      isVerifiedIMD: true,
       downloadsCount: 0,
       keyTakeaways: newTakeaways ? newTakeaways.split('\n').filter(Boolean) : [
         'Documented direct field operational observation',
@@ -159,10 +171,10 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
     };
 
     setKnowledgeItems([newItem, ...knowledgeItems]);
-    setIsContributeModalOpen(false);
+    handleCloseContributeModal();
     sound.playReward();
     confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
-    onAwardXP?.(200, 'Published Case Study / Knowledge Debrief to Centralized Hub');
+    onAwardXP?.(200, 'Published Study Material / SOP to Centralized Hub');
 
     // reset
     setNewTitle('');
@@ -182,7 +194,7 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
       category: questionCategory,
       authorName: 'Cadet Rohan (You)',
       authorRole: 'Trainee Meteorologist',
-      authorAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+      authorAvatar: '',
       postedAt: 'Just now',
       upvotes: 1,
       answers: []
@@ -203,7 +215,7 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
       id: `ans-${Date.now()}`,
       authorName: currentUserRole === 'Admin' ? 'Dr. Ananya Sengupta (Faculty)' : 'Trainee Forecaster',
       authorRole: currentUserRole === 'Admin' ? 'Chief Radar Scientist' : 'Meteorologist Cadet',
-      authorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+      authorAvatar: '',
       isFacultyVerified: currentUserRole === 'Admin' || currentUserRole === 'Trainer',
       content: answerContent,
       upvotes: 0,
@@ -278,27 +290,38 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <button
-              onClick={() => setIsContributeModalOpen(true)}
-              className={`flex-1 lg:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black transition-all ${
-                isBright
-                  ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-sm hover:shadow'
-                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:brightness-110 text-slate-950 font-black shadow-[0_0_20px_rgba(6,182,212,0.3)]'
-              }`}
-            >
-              <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Contribute Case Debrief / SOP</span>
-            </button>
+            {/* Study material and SOP upload option ONLY appears for trainers */}
+            {isTrainer && (
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playBlip(700);
+                  setIsContributeModalOpen(true);
+                }}
+                className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black transition-all shadow-md bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-purple-500/20 active:scale-95 cursor-pointer ring-2 ring-purple-400/30"
+                title="Faculty Action: Upload new meteorological study guide, calibration SOP, or case debrief"
+              >
+                <Plus className="w-4 h-4 stroke-[3]" />
+                <span>Upload Study Material / SOP</span>
+                <span className="px-1.5 py-0.5 rounded bg-white/20 text-[10px] font-mono tracking-wider uppercase">
+                  Faculty Only
+                </span>
+              </button>
+            )}
 
             <button
-              onClick={() => setIsNewQuestionModalOpen(true)}
-              className={`flex-1 lg:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${
+              type="button"
+              onClick={() => {
+                sound.playBlip(600);
+                setIsNewQuestionModalOpen(true);
+              }}
+              className={`flex-1 lg:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                 isBright
-                  ? 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                  ? 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300 shadow-2xs'
                   : 'bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border-cyan-500/40'
               }`}
             >
-              <HelpCircle className="w-4 h-4" />
+              <HelpCircle className="w-4 h-4 text-sky-500" />
               <span>Ask Field Expert</span>
             </button>
           </div>
@@ -406,6 +429,68 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
         </div>
       )}
 
+      {/* High-Visibility Trainer Publishing Deck & Trainee Repository Banner */}
+      {activeSubTab !== 'forum' && (
+        <>
+          {isTrainer ? (
+            <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all ${
+              isBright
+                ? 'bg-gradient-to-r from-purple-50 via-indigo-50/60 to-sky-50/70 border-purple-200/90 text-purple-950 shadow-2xs'
+                : 'bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-[#0b1222] border-purple-900/50 text-purple-200 shadow-lg'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-purple-600 text-white shadow-xs shrink-0">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-purple-900 dark:text-purple-200">
+                      Faculty Authoring & SOP Publishing Station
+                    </h4>
+                    <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-purple-200/80 text-purple-900 font-bold">
+                      Trainer Verified
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                    As an accredited trainer, you have authorization to publish meteorological case studies, radar calibration SOPs, and study notes.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playBlip(700);
+                  setIsContributeModalOpen(true);
+                }}
+                className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black bg-purple-600 hover:bg-purple-500 text-white shadow-md active:scale-95 cursor-pointer transition-all"
+                title="Upload accredited study material, case study, or SOP manual"
+              >
+                <Plus className="w-4 h-4 stroke-[3]" />
+                <span>Upload New Study Material</span>
+              </button>
+            </div>
+          ) : (
+            <div className={`px-4 py-2.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs transition-colors ${
+              isBright
+                ? 'bg-sky-50/80 border-sky-200 text-sky-950'
+                : 'bg-sky-950/20 border-sky-900/40 text-sky-200'
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <span className="font-bold text-sky-900 dark:text-sky-200">National Meteorological Study Vault:</span>
+                <span className="text-slate-600 dark:text-slate-300">
+                  Study materials and official SOPs are curated exclusively by IMD Senior Faculty. Cadets can read and download for offline field operations.
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 shrink-0">
+                Cadet Reading Vault
+              </span>
+            </div>
+          )}
+        </>
+      )}
+
       {/* TAB 1 & 2: KNOWLEDGE ARTICLES & SOPs GRID */}
       {activeSubTab !== 'forum' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -474,11 +559,9 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
               <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <img
-                      src={item.authorAvatar}
-                      alt={item.authorName}
-                      className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-300 dark:ring-slate-700"
-                    />
+                    <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[10px] text-slate-700 dark:text-slate-300">
+                      {item.authorName.replace(/^(Dr\.|Prof\.|Er\.)\s*/, '').split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
+                    </div>
                     <div>
                       <p className="text-xs font-bold truncate max-w-[130px]">{item.authorName}</p>
                       <p className="text-[10px] text-slate-400 truncate max-w-[130px]">{item.stationOrInstitute}</p>
@@ -564,7 +647,9 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
                     </p>
 
                     <div className="flex items-center gap-2 pt-1 text-xs">
-                      <img src={q.authorAvatar} alt={q.authorName} className="w-5 h-5 rounded-full object-cover" />
+                      <div className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[9px] text-slate-700 dark:text-slate-300">
+                        {q.authorName.replace(/^(Dr\.|Prof\.|Er\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
                       <span className="font-bold text-slate-700 dark:text-slate-300">{q.authorName}</span>
                       <span className="text-[11px] text-slate-400 font-mono">({q.authorRole})</span>
                     </div>
@@ -620,7 +705,9 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
                       >
                         <div className="flex items-center justify-between mb-1.5">
                           <div className="flex items-center gap-2">
-                            <img src={ans.authorAvatar} alt={ans.authorName} className="w-5 h-5 rounded-full object-cover" />
+                            <div className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[9px] text-slate-700 dark:text-slate-300">
+                              {ans.authorName.replace(/^(Dr\.|Prof\.|Er\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </div>
                             <span className="text-xs font-bold">{ans.authorName}</span>
                             <span className="text-[10px] text-slate-400 font-mono">({ans.authorRole})</span>
                             {ans.isFacultyVerified && (
@@ -714,11 +801,9 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
             {/* Author info */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100 dark:border-slate-800/80">
               <div className="flex items-center gap-3">
-                <img
-                  src={selectedItemForReading.authorAvatar}
-                  alt={selectedItemForReading.authorName}
-                  className="w-10 h-10 rounded-full object-cover ring-2 ring-sky-500/30"
-                />
+                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-sm text-slate-700 dark:text-slate-300">
+                  {selectedItemForReading.authorName.replace(/^(Dr\.|Prof\.|Er\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                </div>
                 <div>
                   <h4 className="text-xs font-bold">{selectedItemForReading.authorName}</h4>
                   <p className="text-[11px] text-slate-400">{selectedItemForReading.authorDesignation}</p>
@@ -816,8 +901,8 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
         </div>
       )}
 
-      {/* MODAL 2: CONTRIBUTE KNOWLEDGE / CASE DEBRIEF */}
-      {isContributeModalOpen && (
+      {/* MODAL 2: CONTRIBUTE KNOWLEDGE / CASE DEBRIEF (TRAINER ONLY) */}
+      {showContributeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
           <div className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border shadow-2xl p-6 ${
             isBright ? 'bg-white border-slate-200 text-slate-900' : 'bg-[#0a1122] border-cyan-500/40 text-white'
@@ -825,16 +910,16 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
               <div>
                 <h3 className="text-lg font-bold flex items-center gap-2">
-                  <Plus className="w-5 h-5 text-emerald-500" />
-                  <span>Contribute Case Study or Operational SOP</span>
+                  <Plus className="w-5 h-5 text-purple-500" />
+                  <span>Upload Accredited Study Material & Operational SOP</span>
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Share real-world radar observations, station calibration tips, or nowcasting debriefs with the IMD workforce.
+                  Trainer Authoring Portal: Publish real-world radar observations, station calibration manuals, or nowcasting debriefs for cadet trainees.
                 </p>
               </div>
               <button
-                onClick={() => setIsContributeModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-200"
+                onClick={handleCloseContributeModal}
+                className="p-1 text-slate-400 hover:text-slate-200 cursor-pointer"
               >
                 ✕
               </button>
@@ -958,20 +1043,20 @@ export const KnowledgeSharingHub: React.FC<KnowledgeSharingHubProps> = ({
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setIsContributeModalOpen(false)}
-                  className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200"
+                  onClick={handleCloseContributeModal}
+                  className="px-4 py-2 text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className={`px-5 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                  className={`px-5 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
                     isBright
-                      ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-sm'
-                      : 'bg-gradient-to-r from-cyan-500 to-emerald-500 hover:brightness-110 text-slate-950 font-black shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                      ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-sm'
+                      : 'bg-gradient-to-r from-purple-500 to-indigo-500 hover:brightness-110 text-white font-black shadow-[0_0_15px_rgba(168,85,247,0.3)]'
                   }`}
                 >
-                  Publish to Centralized Hub (+200 XP)
+                  Publish Study Material / SOP (+200 XP)
                 </button>
               </div>
             </form>

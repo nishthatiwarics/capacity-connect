@@ -8,6 +8,7 @@ import { useTheme } from '../context/ThemeContext';
 interface DemoAccountsCardProps {
   currentRole: UserRole;
   onSelectRole: (role: UserRole) => void;
+  onRequestAdminClearance?: (targetRole: UserRole) => void;
   variant?: 'inline' | 'modal' | 'dropdown';
   onClose?: () => void;
 }
@@ -15,6 +16,7 @@ interface DemoAccountsCardProps {
 export const DemoAccountsCard: React.FC<DemoAccountsCardProps> = ({
   currentRole,
   onSelectRole,
+  onRequestAdminClearance,
   variant = 'inline',
   onClose,
 }) => {
@@ -49,6 +51,33 @@ export const DemoAccountsCard: React.FC<DemoAccountsCardProps> = ({
   };
 
   const handleSelect = (account: DemoAccount) => {
+    // SECURITY GUARD:
+    // Only Admin can access trainee and trainer's dashboard
+    // Learner cannot access admin dashboard
+    if (currentRole !== 'Admin' && account.role === 'Admin') {
+      sound.playAlert();
+      if (onRequestAdminClearance) {
+        onRequestAdminClearance('Admin');
+      }
+      return;
+    }
+
+    if (currentRole === 'Trainee' && account.role === 'Trainer') {
+      sound.playAlert();
+      if (onRequestAdminClearance) {
+        onRequestAdminClearance('Trainer');
+      }
+      return;
+    }
+
+    if (currentRole === 'Trainer' && account.role === 'Trainee') {
+      sound.playAlert();
+      if (onRequestAdminClearance) {
+        onRequestAdminClearance('Trainee');
+      }
+      return;
+    }
+
     sound.playBlip(750, 0.08);
     onSelectRole(account.role);
     if (onClose) {
@@ -151,6 +180,18 @@ export const DemoAccountsCard: React.FC<DemoAccountsCardProps> = ({
                         Active
                       </span>
                     )}
+                    {acc.role === 'Admin' && currentRole !== 'Admin' && (
+                      <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase rounded bg-amber-500/20 text-amber-600 border border-amber-500/30 flex items-center gap-1">
+                        <Lock className="w-2.5 h-2.5" />
+                        <span>DG Only</span>
+                      </span>
+                    )}
+                    {currentRole === 'Trainee' && acc.role === 'Trainer' && (
+                      <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase rounded bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400 flex items-center gap-1">
+                        <Lock className="w-2.5 h-2.5" />
+                        <span>Faculty</span>
+                      </span>
+                    )}
                   </div>
                   <div className={`text-xs font-semibold ${isBright ? 'text-slate-800' : 'text-slate-200'}`}>
                     {acc.name}
@@ -166,6 +207,8 @@ export const DemoAccountsCard: React.FC<DemoAccountsCardProps> = ({
               <div className="flex flex-col items-end justify-between h-full pt-1 shrink-0">
                 {isSelected ? (
                   <CheckCircle2 className={`w-5 h-5 ${isBright ? 'text-sky-600' : 'text-cyan-400'}`} />
+                ) : (acc.role === 'Admin' && currentRole !== 'Admin') || (currentRole === 'Trainee' && acc.role === 'Trainer') || (currentRole === 'Trainer' && acc.role === 'Trainee') ? (
+                  <Lock className="w-4 h-4 text-amber-500/70" />
                 ) : (
                   <ChevronRight className={`w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all ${
                     isBright ? 'text-slate-400' : 'text-slate-500'
@@ -176,7 +219,13 @@ export const DemoAccountsCard: React.FC<DemoAccountsCardProps> = ({
                     ? isBright ? 'text-sky-700 font-semibold' : 'text-cyan-300 font-semibold'
                     : isBright ? 'text-slate-400' : 'text-slate-500'
                 }`}>
-                  {acc.role === 'Admin' ? 'HQ Oversight' : acc.role === 'Trainer' ? 'Upload & Teach' : 'Learn & Certify'}
+                  {acc.role === 'Admin' && currentRole !== 'Admin' 
+                    ? 'Requires DG PIN' 
+                    : acc.role === 'Admin' 
+                      ? 'HQ Oversight (All Access)' 
+                      : acc.role === 'Trainer' 
+                        ? 'Upload & Teach' 
+                        : 'Learn & Certify'}
                 </span>
               </div>
             </button>

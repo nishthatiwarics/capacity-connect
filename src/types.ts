@@ -262,6 +262,35 @@ export interface Badge {
   unlockedCount: number;
 }
 
+export type RequestUrgency = 'Routine' | 'Priority' | 'Emergency';
+export type RequestStatus = 'Pending' | 'Approved' | 'Rejected';
+
+export interface ApprovalRequest {
+  id: string;
+  requesterRole: 'Trainer' | 'Trainee';
+  requesterId: string;
+  requesterName: string;
+  requesterTitle: string;
+  category: 
+    | 'Radar Simulator Clearance'
+    | 'Course Enrollment Clearance'
+    | 'Advanced Certification Exam'
+    | 'Radar Research Transmission Slot'
+    | 'Publish Demo Video Lecture'
+    | 'Curriculum Syllabus Revision'
+    | 'Guest Faculty Honorarium'
+    | 'Station Reassignment / Leave';
+  title: string;
+  details: string;
+  stationOrInstitute: string;
+  urgency: RequestUrgency;
+  status: RequestStatus;
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  adminRemarks?: string;
+}
+
 export interface ActivityLog {
   id: string;
   timestamp: string;
@@ -269,4 +298,77 @@ export interface ActivityLog {
   action: string;
   category: 'drill' | 'cert' | 'station' | 'course';
   badge?: string;
+}
+
+export interface ChatContact {
+  id: string;
+  name: string;
+  role: 'Trainer' | 'Trainee' | 'Admin';
+  title: string;
+  avatar: string;
+  institution: string;
+  specialization: string;
+  status: 'Online' | 'In Radar Ops' | 'Available' | 'Reviewing Submissions' | 'Offline';
+  unreadCount: number;
+  lastMessage?: string;
+  lastMessageTime?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderRole: 'Trainer' | 'Trainee' | 'Admin' | 'Anonymous';
+  senderAvatar?: string;
+  receiverId?: string; // target user id, or 'channel-all'
+  channelType: 'direct' | 'anonymous';
+  channelTag?: string; // e.g. '#general', '#quiz-feedback', '#lecture-doubts', '#radar-grievances'
+  content: string;
+  timestamp: string;
+  isAnonymous?: boolean;
+  anonymousAlias?: string; // e.g. "Anonymous Meteorologist #408"
+  relatedTopic?: string;
+  likesCount?: number;
+  status?: 'sent' | 'delivered' | 'read';
+}
+
+export interface QuizFeedback {
+  id: string;
+  quizId: string;
+  quizTitle: string;
+  traineeId: string;
+  traineeName: string;
+  traineeRank: string;
+  rating: number; // 1 - 5
+  difficultyFeeling: 'Too Easy' | 'Balanced' | 'Challenging' | 'Extremely Hard';
+  selectedTags: string[];
+  comment: string;
+  reportedQuestionIndex?: number;
+  submittedAt: string;
+  trainerResponse?: string;
+  trainerRespondedBy?: string;
+  trainerRespondedAt?: string;
+}
+
+export interface LectureFeedback {
+  id: string;
+  lectureId: string;
+  lectureTitle: string;
+  teacherId?: string;
+  traineeId: string;
+  traineeName: string;
+  traineeRank: string;
+  rating: number; // 1 - 5
+  contentClarity: number; // 1 - 5
+  audioVisualQuality: number; // 1 - 5
+  pacing: 'Too Slow' | 'Just Right' | 'Too Fast';
+  comment: string;
+  submittedAt: string;
+  likesCount: number;
+  trainerResponse?: {
+    trainerName: string;
+    trainerTitle: string;
+    comment: string;
+    respondedAt: string;
+  };
 }

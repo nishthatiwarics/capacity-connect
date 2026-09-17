@@ -124,6 +124,10 @@ class TacticalSoundEngine {
     }
   }
 
+  public playAlarm() {
+    this.playAlert();
+  }
+
   public playMikuJingle() {
     if (this.isMuted) return;
     const ctx = this.getContext();

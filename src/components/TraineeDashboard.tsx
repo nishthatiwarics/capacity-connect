@@ -17,9 +17,12 @@ import {
   ArrowRight,
   Search,
   Eye,
-  Zap
+  Zap,
+  Send,
+  Clock,
+  AlertCircle
 } from 'lucide-react';
-import { Trainee, DemoLecture, Course, StudentProfileData } from '../types';
+import { Trainee, DemoLecture, Course, StudentProfileData, ApprovalRequest } from '../types';
 import { ANIMAL_TIER_CONFIGS } from '../data/studentRankData';
 import { StudentProfileCard } from './StudentProfileCard';
 import { StudentFunQuizArena } from './StudentFunQuizArena';
@@ -31,6 +34,7 @@ interface TraineeDashboardProps {
   demoLectures: DemoLecture[];
   courses: Course[];
   studentProfile: StudentProfileData;
+  approvalRequests?: ApprovalRequest[];
   onUpdateStudentProfile: (profile: StudentProfileData) => void;
   onAwardXP?: (amount: number, reason: string) => void;
   onPlayLecture: (lecture: DemoLecture) => void;
@@ -39,6 +43,7 @@ interface TraineeDashboardProps {
   onOpenDrill: () => void;
   onOpenCertificate: (course: Course) => void;
   onOpenQuizArena?: () => void;
+  onSubmitApprovalRequest?: (req: Omit<ApprovalRequest, 'id' | 'status' | 'submittedAt'>) => void;
 }
 
 export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
@@ -46,6 +51,7 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
   demoLectures,
   courses,
   studentProfile,
+  approvalRequests = [],
   onUpdateStudentProfile,
   onAwardXP,
   onPlayLecture,
@@ -54,12 +60,20 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
   onOpenDrill,
   onOpenCertificate,
   onOpenQuizArena,
+  onSubmitApprovalRequest,
 }) => {
   const { isBright } = useTheme();
 
-  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'quiz-arena' | 'lectures' | 'accreditation'>('profile');
+  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'quiz-arena' | 'lectures' | 'accreditation' | 'requests'>('profile');
   const [lectureFilter, setLectureFilter] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Trainee Clearance Request Form State
+  const [reqCategory, setReqCategory] = useState<ApprovalRequest['category']>('Radar Simulator Clearance');
+  const [reqTitle, setReqTitle] = useState('');
+  const [reqDetails, setReqDetails] = useState('');
+  const [reqUrgency, setReqUrgency] = useState<ApprovalRequest['urgency']>('Routine');
+  const [reqSubmittedSuccess, setReqSubmittedSuccess] = useState(false);
 
   const rankConfig = ANIMAL_TIER_CONFIGS[studentProfile.currentAnimalRank];
 
@@ -313,6 +327,30 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
           <Award className="w-4 h-4" />
           <span>Accreditation Lock & WMO Licenses</span>
         </button>
+
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveSubTab('requests');
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            activeSubTab === 'requests'
+              ? isBright
+                ? 'bg-amber-600 text-white shadow-sm font-black'
+                : 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black'
+              : isBright
+                ? 'text-slate-600 hover:bg-slate-100'
+                : 'text-slate-400 hover:bg-slate-800/60'
+          }`}
+        >
+          <Send className="w-4 h-4" />
+          <span>Cadet Clearances to DG ({approvalRequests.filter((r) => r.requesterRole === 'Trainee').length})</span>
+          {approvalRequests.filter((r) => r.requesterRole === 'Trainee' && r.status === 'Pending').length > 0 && (
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500 text-slate-950 font-black">
+              {approvalRequests.filter((r) => r.requesterRole === 'Trainee' && r.status === 'Pending').length} Pending
+            </span>
+          )}
+        </button>
       </div>
 
       {/* SUB-TAB 0: STUDENT COMPETENCY PROFILE & STREAKS */}
@@ -432,11 +470,17 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
                   <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <img
-                          src={lec.teacherAvatar}
-                          alt={lec.teacherName}
-                          className="w-5 h-5 rounded-full object-cover"
-                        />
+                        {lec.teacherAvatar ? (
+                          <img
+                            src={lec.teacherAvatar}
+                            alt={lec.teacherName}
+                            className="w-5 h-5 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[9px] text-slate-700 dark:text-slate-300">
+                            {lec.teacherName.replace(/^(Dr\.|Prof\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                          </div>
+                        )}
                         <span className="text-[11px] font-semibold text-sky-600 dark:text-cyan-400 truncate">
                           {lec.teacherName}
                         </span>
@@ -583,6 +627,196 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
                     >
                       View Diploma
                     </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUB-TAB 4: CADET CLEARANCES & PETITIONS TO DG / ADMIN */}
+      {activeSubTab === 'requests' && (
+        <div className="space-y-6">
+          <div className={`p-6 rounded-2xl border ${
+            isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
+          }`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className={`text-base font-bold tracking-tight ${isBright ? 'text-slate-900' : 'text-white'}`}>
+                  Cadet Clearances & Directorate Authorization
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Lodge official clearance requests to the Director General for specialized radar simulator authorization, course enrollment prerequisites, or station assignments.
+                </p>
+              </div>
+
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/15 border border-amber-500/40 text-amber-600 dark:text-amber-400">
+                Direct Cadet-to-DG Pipeline
+              </span>
+            </div>
+
+            {/* Submission Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!reqTitle.trim() || !reqDetails.trim()) return;
+                if (onSubmitApprovalRequest) {
+                  onSubmitApprovalRequest({
+                    requesterRole: 'Trainee',
+                    requesterId: trainee.id,
+                    requesterName: trainee.name,
+                    requesterTitle: `${trainee.batch} • ${studentProfile.currentAnimalRank.toUpperCase()}`,
+                    category: reqCategory,
+                    title: reqTitle.trim(),
+                    details: reqDetails.trim(),
+                    stationOrInstitute: trainee.station,
+                    urgency: reqUrgency
+                  });
+                }
+                sound.playSuccess();
+                setReqTitle('');
+                setReqDetails('');
+                setReqSubmittedSuccess(true);
+                setTimeout(() => setReqSubmittedSuccess(false), 4000);
+              }}
+              className={`p-5 rounded-2xl border space-y-4 mb-8 ${
+                isBright ? 'bg-amber-50/40 border-amber-300' : 'bg-amber-950/20 border-amber-800/50'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Send className="w-4 h-4 text-amber-500" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+                  Lodge Formal Cadet Request to Director General
+                </h4>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Clearance Category</label>
+                  <select
+                    value={reqCategory}
+                    onChange={(e) => setReqCategory(e.target.value as ApprovalRequest['category'])}
+                    className={`w-full p-2 rounded-lg border text-xs ${
+                      isBright ? 'bg-white border-slate-300 text-slate-900' : 'bg-slate-900 border-slate-700 text-white'
+                    }`}
+                  >
+                    <option value="Radar Simulator Clearance">Radar Doppler Simulator Solo Clearance</option>
+                    <option value="Course Enrollment Exemption">Course Enrollment Prerequisite Exemption</option>
+                    <option value="WMO Exam Attempt">WMO Senior Certification Exam Accelerated Sitting</option>
+                    <option value="Station Reassignment / Leave">Severe Weather Field Assignment Request</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Priority / Urgency</label>
+                  <select
+                    value={reqUrgency}
+                    onChange={(e) => setReqUrgency(e.target.value as ApprovalRequest['urgency'])}
+                    className={`w-full p-2 rounded-lg border text-xs ${
+                      isBright ? 'bg-white border-slate-300 text-slate-900' : 'bg-slate-900 border-slate-700 text-white'
+                    }`}
+                  >
+                    <option value="Routine">Routine (Standard Cadet Review)</option>
+                    <option value="Priority">Priority (Upcoming Simulation Window)</option>
+                    <option value="Emergency">Emergency (Immediate Station Deployment)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold mb-1">Subject / Clearance Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g., Solo Doppler Radar Volumetric Scan Protocol Authorization"
+                  value={reqTitle}
+                  onChange={(e) => setReqTitle(e.target.value)}
+                  className={`w-full p-2 rounded-lg border text-xs ${
+                    isBright ? 'bg-white border-slate-300 text-slate-900' : 'bg-slate-900 border-slate-700 text-white'
+                  }`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold mb-1">Explanation & Statement of Preparedness</label>
+                <textarea
+                  rows={2}
+                  required
+                  placeholder="State your completed modules, current radar competency score, and why this clearance is requested..."
+                  value={reqDetails}
+                  onChange={(e) => setReqDetails(e.target.value)}
+                  className={`w-full p-2 rounded-lg border text-xs ${
+                    isBright ? 'bg-white border-slate-300 text-slate-900' : 'bg-slate-900 border-slate-700 text-white'
+                  }`}
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                {reqSubmittedSuccess ? (
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Clearance request transmitted to Director General for review!</span>
+                  </span>
+                ) : <span />}
+
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs shadow transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Transmit to DG Mausam Bhawan</span>
+                </button>
+              </div>
+            </form>
+
+            {/* List of Trainee Requests */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                My Cadet Requests & Approval Status
+              </h4>
+
+              <div className="space-y-3">
+                {approvalRequests.filter((r) => r.requesterRole === 'Trainee').map((req) => (
+                  <div
+                    key={req.id}
+                    className={`p-4 rounded-xl border ${
+                      req.status === 'Approved'
+                        ? 'bg-emerald-500/10 border-emerald-500/30'
+                        : req.status === 'Rejected'
+                          ? 'bg-rose-500/10 border-rose-500/30'
+                          : isBright ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/60 border-slate-800'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 text-[10px] font-black uppercase rounded ${
+                          req.status === 'Approved'
+                            ? 'bg-emerald-500 text-white'
+                            : req.status === 'Rejected'
+                              ? 'bg-rose-500 text-white'
+                              : 'bg-amber-500 text-slate-950'
+                        }`}>
+                          {req.status}
+                        </span>
+                        <h5 className="text-xs font-bold text-slate-900 dark:text-white">{req.title}</h5>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-mono">Submitted {req.submittedAt}</span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-2">{req.details}</p>
+
+                    {req.reviewedBy && (
+                      <div className="mt-2.5 p-2 rounded-lg bg-black/5 dark:bg-black/40 border border-slate-200 dark:border-slate-800 text-[11px] flex items-start gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-slate-800 dark:text-slate-200">{req.status} by {req.reviewedBy}</span>
+                          {req.adminRemarks && (
+                            <p className="italic text-slate-500 mt-0.5">&ldquo;{req.adminRemarks}&rdquo;</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

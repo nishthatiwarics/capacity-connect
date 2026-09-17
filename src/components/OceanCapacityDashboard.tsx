@@ -215,21 +215,21 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
       rank: 1,
       name: 'Ananya Rao',
       xp: '5,420 XP',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+      avatar: '',
       badgeColor: 'bg-amber-400 text-amber-950 ring-2 ring-amber-300'
     },
     {
       rank: 2,
       name: 'Rohan Verma',
       xp: '4,890 XP',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+      avatar: '',
       badgeColor: 'bg-slate-300 text-slate-900 ring-2 ring-slate-200'
     },
     {
       rank: 3,
       name: 'Meera Iyer',
       xp: '4,320 XP',
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80',
+      avatar: '',
       badgeColor: 'bg-amber-700 text-amber-100 ring-2 ring-amber-600/50'
     },
     {
@@ -256,9 +256,9 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
         <div className="xl:col-span-8 space-y-6">
 
           {/* Ocean Hero Banner matching reference image */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0b2447] via-[#19376d] to-[#142d55] text-white p-6 sm:p-8 lg:p-10 shadow-lg border border-sky-900/30">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#0ea5e9] text-white p-6 sm:p-8 lg:p-10 shadow-lg border border-sky-400/40">
             {/* Background image overlay */}
-            <div className="absolute inset-0 opacity-25 mix-blend-screen pointer-events-none">
+            <div className="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none">
               <img 
                 src={oceanHeroBanner} 
                 alt="MoES Ocean Science Banner" 
@@ -266,11 +266,11 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
               />
             </div>
             {/* Gradient wash overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0b2447]/95 via-[#19376d]/80 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1]/95 via-[#0284c7]/75 to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl">
               {/* Category eyebrow */}
-              <div className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase font-bold text-sky-300/90 mb-3 bg-sky-950/60 px-3 py-1 rounded-full border border-sky-700/40 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase font-bold text-sky-200 mb-3 bg-white/15 px-3 py-1 rounded-full border border-white/25 backdrop-blur-sm">
                 <span>LEARN</span>
                 <span>•</span>
                 <span>CONTRIBUTE</span>
@@ -280,10 +280,10 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
 
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight font-sans drop-shadow-sm">
                 Build a Safer,<br />
-                <span className="text-sky-300">Brighter Tomorrow</span>
+                <span className="text-sky-200">Brighter Tomorrow</span>
               </h1>
 
-              <p className="mt-3 text-sm sm:text-base text-sky-100/80 leading-relaxed max-w-lg font-normal">
+              <p className="mt-3 text-sm sm:text-base text-sky-100 leading-relaxed max-w-lg font-normal">
                 Gain skills. Earn recognition. Be part of a resilient India through ocean, atmosphere and earth system science.
               </p>
 
@@ -304,7 +304,7 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                     sound.playBlip(700);
                     onOpenSkillTree?.();
                   }}
-                  className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm backdrop-blur-md transition-all active:scale-95 cursor-pointer"
+                  className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold text-sm backdrop-blur-md transition-all active:scale-95 cursor-pointer"
                 >
                   Explore Skill Tree
                 </button>
@@ -316,7 +316,7 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
               <span className="text-xs font-serif italic text-amber-200 drop-shadow-sm">
                 Healthy Oceans
               </span>
-              <span className="text-xs font-serif italic text-sky-200 drop-shadow-sm">
+              <span className="text-xs font-serif italic text-sky-100 drop-shadow-sm">
                 Resilient Coasts
               </span>
               <span className="text-sm font-serif italic font-bold text-white drop-shadow-md">
@@ -331,58 +331,58 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
             {/* Card 1: Level */}
             <div 
               onClick={onOpenProfile}
-              className="p-4 rounded-2xl bg-white/90 border border-slate-200/80 hover:border-sky-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
+              className="p-4 rounded-2xl bg-white/95 border border-sky-100 hover:border-sky-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group text-slate-900"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm group-hover:scale-105 transition-transform">
                   <Waves className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Level 7</span>
+                <span className="text-[10px] font-bold text-sky-700 uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">Level 7</span>
               </div>
-              <div className="font-extrabold text-base text-slate-900">Level 7</div>
-              <div className="text-[11px] text-slate-500 font-medium">660 XP to Level 8</div>
+              <div className="font-extrabold text-base text-slate-900">Level 7 Cadet</div>
+              <div className="text-xs text-slate-500 font-medium">660 XP to Level 8</div>
               {/* Progress bar */}
-              <div className="mt-2 w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-sky-500 h-full rounded-full transition-all duration-500" style={{ width: '78%' }} />
+              <div className="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div className="bg-gradient-to-r from-sky-500 to-blue-600 h-full rounded-full transition-all duration-500" style={{ width: '78%' }} />
               </div>
-              <div className="mt-1 text-[10px] text-slate-400 font-mono text-right">2,340 / 3,000 XP</div>
+              <div className="mt-1 text-[11px] text-slate-500 font-mono font-semibold text-right">2,340 / 3,000 XP</div>
             </div>
 
             {/* Card 2: Streak */}
-            <div className="p-4 rounded-2xl bg-white/90 border border-slate-200/80 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all">
+            <div className="p-4 rounded-2xl bg-white/95 border border-amber-100 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
                   <Flame className="w-5 h-5 fill-amber-500 text-amber-500" />
                 </div>
-                <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Active</span>
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Active</span>
               </div>
               <div className="font-extrabold text-base text-slate-900">{dailyStreak} Day Streak</div>
-              <div className="text-[11px] text-slate-500 font-medium mt-1">Keep it up! ☀️</div>
+              <div className="text-xs text-slate-500 font-medium mt-1">Keep it up! ☀️ High Momentum</div>
             </div>
 
             {/* Card 3: Badges */}
-            <div className="p-4 rounded-2xl bg-white/90 border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all">
+            <div className="p-4 rounded-2xl bg-white/95 border border-blue-100 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
                   <Award className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Earned</span>
+                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Earned</span>
               </div>
               <div className="font-extrabold text-base text-slate-900">{badgesCount} Badges Earned</div>
-              <div className="text-[11px] text-slate-500 font-medium mt-1">3 new this month</div>
+              <div className="text-xs text-slate-500 font-medium mt-1">3 new this month</div>
             </div>
 
             {/* Card 4: Global Rank */}
-            <div className="p-4 rounded-2xl bg-white/90 border border-slate-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all">
+            <div className="p-4 rounded-2xl bg-white/95 border border-emerald-100 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
                   <TrendingUp className="w-5 h-5" />
                 </div>
-                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Ranked</span>
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Ranked</span>
               </div>
               <div className="font-extrabold text-base text-slate-900">Top 15%</div>
-              <div className="text-[11px] text-emerald-600 font-medium mt-1 flex items-center gap-1">
-                <span>↑ 12 places</span>
+              <div className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+                <span>↑ 12 places this week</span>
               </div>
             </div>
           </div>
@@ -394,13 +394,13 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                 <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
                   Recommended for You
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Based on your interests in Oceanography and Climate
+                <p className="text-xs text-slate-500 font-medium">
+                  Based on your interests in Oceanography, Radar Systems and Climate
                 </p>
               </div>
               <button 
                 onClick={() => onOpenSkillTree?.()}
-                className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 hover:bg-sky-100 transition-colors"
               >
                 <span>View All</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -412,7 +412,7 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
               {RECOMMENDED_COURSES.map((course) => (
                 <div
                   key={course.id}
-                  className="rounded-2xl bg-white/95 border border-slate-200/80 hover:border-sky-300 shadow-2xs hover:shadow-md transition-all flex flex-col overflow-hidden group"
+                  className="rounded-2xl bg-white/95 border border-slate-200/80 hover:border-sky-300 shadow-2xs hover:shadow-md transition-all flex flex-col overflow-hidden group text-slate-900"
                 >
                   {/* Thumbnail with overlay badges */}
                   <div className="relative h-32 w-full overflow-hidden bg-slate-100">
@@ -425,13 +425,13 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                     
                     {/* Level Badge */}
                     <div className="absolute top-2 left-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs ${course.tagColor}`}>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-2xs ${course.tagColor}`}>
                         {course.level}
                       </span>
                     </div>
 
                     {/* Rating Badge */}
-                    <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-amber-300 px-1.5 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-0.5">
+                    <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white px-1.5 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-0.5">
                       <span>{course.rating}</span>
                       <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                     </div>
@@ -440,17 +440,17 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                   {/* Body Content */}
                   <div className="p-3.5 flex-1 flex flex-col justify-between">
                     <div>
-                      <h4 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 group-hover:text-sky-700 transition-colors">
+                      <h4 className="font-bold text-sm text-slate-900 leading-snug line-clamp-2 group-hover:text-sky-700 transition-colors">
                         {course.title}
                       </h4>
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-2">
+                      <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mt-2">
                         <span className="flex items-center gap-1">
-                          <BookOpen className="w-3 h-3 text-slate-400" />
+                          <BookOpen className="w-3.5 h-3.5 text-slate-400" />
                           <span>{course.modulesCount} modules</span>
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-slate-400" />
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
                           <span>{course.duration}</span>
                         </span>
                       </div>
@@ -460,10 +460,10 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                     <div className="mt-3.5 pt-2.5 border-t border-slate-100">
                       <button
                         onClick={() => handleCourseAction(course)}
-                        className={`w-full py-1.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs ${
+                        className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs ${
                           course.isContinuing
-                            ? 'bg-[#ea580c] hover:bg-[#c2410c] text-white'
-                            : 'bg-slate-100 hover:bg-sky-100 text-slate-800 hover:text-sky-900'
+                            ? 'bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold'
+                            : 'bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-900 border border-slate-200'
                         }`}
                       >
                         <span>{course.isContinuing ? 'Continue' : 'Start Course'}</span>
@@ -477,19 +477,19 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
           </div>
 
           {/* Your Skill Tree section */}
-          <div className="rounded-2xl bg-white/90 border border-slate-200/80 p-5 shadow-2xs space-y-3">
+          <div className="rounded-2xl bg-white/95 border border-slate-200/80 p-5 shadow-2xs space-y-3 text-slate-900">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
                   Your Skill Tree
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 font-medium">
                   Explore learning paths across ocean, atmosphere, solid earth and more.
                 </p>
               </div>
               <button
                 onClick={() => onOpenSkillTree?.()}
-                className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer"
+                className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1 cursor-pointer bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 hover:bg-sky-100 transition-colors"
               >
                 <span>View Full Tree</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -507,10 +507,10 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                       sound.playBlip(650);
                       setSelectedSkillCategory(cat);
                     }}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer shadow-xs ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                       isSelected
-                        ? 'bg-slate-900 text-white font-bold'
-                        : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+                        ? 'bg-slate-900 text-white font-bold shadow-xs'
+                        : 'bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-slate-200 font-medium'
                     }`}
                   >
                     {cat}
@@ -531,14 +531,14 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
           <OceanQuoteCard variant="card" />
 
           {/* 2. Today's Quests Card */}
-          <div className="rounded-2xl bg-white/95 border border-slate-200/80 p-5 shadow-2xs space-y-4">
+          <div className="rounded-2xl bg-white/95 border border-slate-200/80 p-5 shadow-2xs space-y-4 text-slate-900">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+              <h3 className="font-extrabold text-base text-slate-900">
                 Today's Quests
               </h3>
               <button 
                 onClick={onOpenQuizArena}
-                className="text-xs font-bold text-sky-700 hover:text-sky-900 cursor-pointer"
+                className="text-xs font-bold text-sky-700 hover:text-sky-900 cursor-pointer bg-sky-50 px-2.5 py-1 rounded-xl border border-sky-200 hover:bg-sky-100 transition-colors"
               >
                 View All
               </button>
@@ -551,20 +551,20 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                   onClick={() => handleToggleQuest(quest.id)}
                   className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
                     quest.completed
-                      ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
-                      : 'bg-slate-50/60 hover:bg-sky-50/60 border-slate-200/80 hover:border-sky-200'
+                      ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
+                      : 'bg-slate-50/70 hover:bg-sky-50/60 border-slate-200/80 hover:border-sky-200'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                      quest.completed ? 'bg-emerald-500 text-white' : 'bg-white border border-slate-200 text-sky-700'
+                      quest.completed ? 'bg-emerald-500 text-white font-bold' : 'bg-white border border-slate-200 text-slate-700'
                     }`}>
                       {quest.completed ? (
                         <Check className="w-4 h-4 stroke-[3]" />
                       ) : quest.icon === 'lesson' ? (
-                        <BookOpen className="w-4 h-4" />
+                        <BookOpen className="w-4 h-4 text-sky-600" />
                       ) : quest.icon === 'video' ? (
-                        <Play className="w-4 h-4 fill-sky-600 text-sky-600" />
+                        <Play className="w-4 h-4 fill-sky-500 text-sky-500" />
                       ) : quest.icon === 'quiz' ? (
                         <Sparkles className="w-4 h-4 text-amber-500" />
                       ) : (
@@ -572,20 +572,20 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                       )}
                     </div>
                     <div>
-                      <div className={`text-xs font-bold leading-tight ${quest.completed ? 'line-through text-slate-500' : 'text-slate-900'}`}>
+                      <div className={`text-xs font-bold leading-tight ${quest.completed ? 'line-through text-slate-400 font-normal' : 'text-slate-900'}`}>
                         {quest.title}
                       </div>
-                      <div className="text-[11px] text-slate-500 leading-snug">
+                      <div className="text-[11px] text-slate-500 font-medium leading-snug">
                         {quest.subtitle}
                       </div>
                     </div>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <div className="text-[11px] font-mono font-bold text-slate-600">
+                    <div className="text-[11px] font-mono font-bold text-slate-500">
                       {quest.progress}
                     </div>
-                    <div className="text-[10px] font-semibold text-emerald-600">
+                    <div className="text-[10px] font-bold text-emerald-600">
                       +{quest.xpReward} XP
                     </div>
                   </div>
@@ -595,21 +595,21 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
           </div>
 
           {/* 3. Leaderboard Card */}
-          <div className="rounded-2xl bg-white/95 border border-slate-200/80 p-5 shadow-2xs space-y-3.5">
+          <div className="rounded-2xl bg-white/95 border border-slate-200/80 p-5 shadow-2xs space-y-3.5 text-slate-900">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
-                Leaderboard
+              <h3 className="font-extrabold text-base text-slate-900">
+                Cadet Leaderboard
               </h3>
               <button 
                 onClick={onOpenProfile}
-                className="text-xs font-bold text-sky-700 hover:text-sky-900 cursor-pointer"
+                className="text-xs font-bold text-sky-700 hover:text-sky-900 cursor-pointer bg-sky-50 px-2.5 py-1 rounded-xl border border-sky-200 hover:bg-sky-100 transition-colors"
               >
                 View All
               </button>
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex items-center p-1 rounded-xl bg-slate-100 text-xs font-semibold">
+            <div className="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/70 text-xs font-semibold">
               {(['All Users', 'This Month', 'Friends'] as const).map((tab) => (
                 <button
                   key={tab}
@@ -620,7 +620,7 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                   className={`flex-1 py-1 text-center rounded-lg transition-all ${
                     leaderboardTab === tab
                       ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {tab}
@@ -633,10 +633,10 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
               {LEADERBOARD_USERS.map((user) => (
                 <div
                   key={user.rank}
-                  className={`flex items-center justify-between p-2 rounded-xl transition-all ${
+                  className={`flex items-center justify-between p-2 rounded-xl transition-all border ${
                     user.isCurrentUser
-                      ? 'bg-sky-50 border border-sky-200/90'
-                      : 'hover:bg-slate-50 border border-transparent'
+                      ? 'bg-sky-50 border-sky-300 text-slate-900 font-bold'
+                      : 'hover:bg-slate-50 border-transparent text-slate-700'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -644,25 +644,17 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${user.badgeColor}`}>
                       {user.rank}
                     </div>
-                    {/* Avatar */}
-                    {user.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.name}
-                        className="w-7 h-7 rounded-full object-cover border border-slate-200"
-                      />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-700">
-                        <User className="w-3.5 h-3.5" />
-                      </div>
-                    )}
-                    <span className={`text-xs ${user.isCurrentUser ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}`}>
-                      {user.name} {user.isCurrentUser && '(You)'}
+                    {/* Initials badge instead of profile logo */}
+                    <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-[10px] text-sky-700">
+                      {user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
+                    </div>
+                    <span className={`text-xs ${user.isCurrentUser ? 'font-bold text-slate-900' : 'font-medium text-slate-700'}`}>
+                      {user.name} {user.isCurrentUser && '★ (You)'}
                     </span>
                   </div>
 
-                  <span className="text-xs font-mono font-bold text-slate-700">
-                    {user.xp}
+                  <span className="text-xs font-mono font-bold text-slate-600">
+                    {user.xp} XP
                   </span>
                 </div>
               ))}
@@ -670,15 +662,15 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
           </div>
 
           {/* 4. MoES Ocean Science Slogan Art Card */}
-          <div className="rounded-2xl bg-gradient-to-br from-sky-50 via-white to-pink-50 border border-sky-100 p-4 text-center relative overflow-hidden shadow-2xs">
-            <div className="text-[11px] font-serif italic text-slate-700 font-semibold leading-relaxed">
+          <div className="rounded-2xl bg-gradient-to-br from-sky-50 via-white to-blue-50/70 border border-sky-200/80 p-4 text-center relative overflow-hidden shadow-2xs text-slate-800">
+            <div className="text-xs font-serif italic text-slate-800 font-bold leading-relaxed">
               "Vigyan se Surakshit Samudra,<br />Samruddh Bharat"
             </div>
-            <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400 font-bold mt-1">
+            <div className="text-[10px] uppercase font-mono tracking-wider text-sky-800 font-bold mt-1">
               Ministry of Earth Sciences • Government of India
             </div>
             {/* Visual ocean wave icon */}
-            <div className="mt-2 flex justify-center text-sky-400/60">
+            <div className="mt-2 flex justify-center text-sky-500">
               <Waves className="w-8 h-4" />
             </div>
           </div>

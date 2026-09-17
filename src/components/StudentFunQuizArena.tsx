@@ -954,6 +954,71 @@ export const StudentFunQuizArena: React.FC<StudentFunQuizArenaProps> = ({
             </div>
           </div>
 
+          {/* Cadet Quiz Feedback Card */}
+          <div className="max-w-lg mx-auto p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-left space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                  Trainee Feedback for Faculty on this Quiz
+                </h4>
+              </div>
+              <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold">
+                +20 XP Reward
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-600 dark:text-slate-300">
+              How did the questions feel? Were the Doppler radar PPI scans clear? Help IMD instructors calibrate assessment difficulty.
+            </p>
+
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                'Realistic Radar Echoes',
+                'Great Physics Breakdown',
+                'Timer Felt Rushed',
+                'Challenging Couplet'
+              ].map(tag => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-0.5 rounded-lg text-[10px] font-mono bg-white/80 dark:bg-slate-900/80 border border-amber-300 dark:border-amber-800/60 text-slate-700 dark:text-slate-300"
+                >
+                  ✓ {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <input
+                type="text"
+                placeholder="Write specific suggestions or question feedback..."
+                className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-amber-300 dark:border-amber-800/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                    sound.playSuccess();
+                    if (onAwardXP) onAwardXP(20, 'Provided Quiz Assessment Feedback to Faculty');
+                    e.currentTarget.value = '';
+                    alert("Thank you! Your feedback on this quiz session has been dispatched to IMD trainers.");
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={(e) => {
+                  const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                  if (input && input.value.trim()) {
+                    sound.playSuccess();
+                    if (onAwardXP) onAwardXP(20, 'Provided Quiz Assessment Feedback to Faculty');
+                    input.value = '';
+                    alert("Thank you! Your feedback on this quiz session has been dispatched to IMD trainers.");
+                  }
+                }}
+                className="px-4 py-1.5 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white transition-all cursor-pointer shadow-2xs shrink-0"
+              >
+                Send Feedback
+              </button>
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
             <button

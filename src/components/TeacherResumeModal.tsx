@@ -167,11 +167,17 @@ Generated on: ${new Date().toLocaleDateString('en-IN', { dateStyle: 'full' })}
             isBright ? 'bg-slate-50/80 border-slate-200' : 'bg-[#0f192e] border-slate-800'
           }`}>
             <div className="flex items-center gap-4">
-              <img
-                src={teacher.avatar}
-                alt={teacher.name}
-                className="w-16 h-16 rounded-2xl object-cover border-2 border-sky-500/40 shadow-sm"
-              />
+              {teacher.avatar ? (
+                <img
+                  src={teacher.avatar}
+                  alt={teacher.name}
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-sky-500/40 shadow-sm"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-base text-slate-800 dark:text-slate-100 shadow-sm">
+                  {teacher.name.replace(/^(Dr\.|Prof\.)\s*/, '').split(' ').map((n) => n[0]).join('').slice(0, 2)}
+                </div>
+              )}
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-bold tracking-tight">{teacher.name}</h3>

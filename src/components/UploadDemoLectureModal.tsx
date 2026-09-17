@@ -30,7 +30,7 @@ export const UploadDemoLectureModal: React.FC<UploadDemoLectureModalProps> = ({
   onPublishLecture,
   teacherName = 'Dr. Someshwar Rao',
   teacherTitle = 'Lead Doppler Radar Faculty (CTI Pune)',
-  teacherAvatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+  teacherAvatar = '',
 }) => {
   const { isBright } = useTheme();
 

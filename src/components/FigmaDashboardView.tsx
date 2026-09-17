@@ -119,19 +119,19 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
         {/* Card 1: Total Users */}
         <div 
           onClick={onNavigateToTrainees}
-          className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:border-black transition-all cursor-pointer group"
+          className="bg-white/90 backdrop-blur-md border border-sky-200/80 hover:border-sky-400 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group text-slate-900"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Total Users</span>
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-black group-hover:bg-black group-hover:text-white transition-colors">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Enrolled Cadets</span>
+            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-700 group-hover:bg-sky-600 group-hover:text-white transition-colors shadow-xs">
               <Users className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <h3 className="text-3xl font-extrabold text-black tracking-tight">12,847</h3>
+            <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight">12,847</h3>
             <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
               <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-              <span>+14.2%</span>
+              <span>+14.2% active this cycle</span>
             </div>
           </div>
         </div>
@@ -139,19 +139,19 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
         {/* Card 2: Active Courses */}
         <div 
           onClick={onNavigateToCourses}
-          className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:border-black transition-all cursor-pointer group"
+          className="bg-white/90 backdrop-blur-md border border-blue-200/80 hover:border-blue-400 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group text-slate-900"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Active Courses</span>
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-black group-hover:bg-black group-hover:text-white transition-colors">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Curriculum Modules</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-xs">
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <h3 className="text-3xl font-extrabold text-black tracking-tight">342</h3>
-            <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+            <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight">342</h3>
+            <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-sky-600">
               <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-              <span>+8.4%</span>
+              <span>+8.4% completion rate</span>
             </div>
           </div>
         </div>
@@ -159,19 +159,19 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
         {/* Card 3: Pending Approval */}
         <div 
           onClick={onNavigateToTrainees}
-          className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:border-black transition-all cursor-pointer group"
+          className="bg-white/90 backdrop-blur-md border border-amber-200/80 hover:border-amber-400 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group text-slate-900"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Pending Approval</span>
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-black group-hover:bg-black group-hover:text-white transition-colors">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending Requisitions</span>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-700 group-hover:bg-amber-500 group-hover:text-white transition-colors shadow-xs">
               <Clock className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <h3 className="text-3xl font-extrabold text-black tracking-tight">19</h3>
-            <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-rose-600">
+            <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight">19</h3>
+            <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-amber-600">
               <ArrowDownRight className="w-4 h-4 stroke-[2.5]" />
-              <span>-23.5%</span>
+              <span>Awaiting DG Signature</span>
             </div>
           </div>
         </div>
@@ -180,14 +180,14 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
       {/* Middle Section: Capacity Connection Over Time + Recent Trainees */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Card: Capacity Connection Over Time Chart (lg:col-span-8) */}
-        <div className="lg:col-span-8 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col justify-between text-slate-900">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-base font-bold text-black tracking-tight">
-                Capacity Connection Over Time
+              <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
+                Capacity Connection & Radar Telemetry Over Time
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Monitor interactive bandwidth and trainee engagement.
+              <p className="text-xs font-medium text-slate-500 mt-0.5">
+                Real-time interactive bandwidth and cadet engagement across national stations.
               </p>
             </div>
 
@@ -195,14 +195,14 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
             <div className="relative">
               <button
                 onClick={() => setIsTimeDropdownOpen(!isTimeDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-black bg-white hover:border-black transition-colors shadow-2xs"
+                className="flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 bg-white hover:border-sky-400 transition-colors shadow-2xs"
               >
                 <span>{timeRange}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {isTimeDropdownOpen && (
-                <div className="absolute right-0 mt-1.5 w-36 bg-white border border-slate-200 rounded-xl shadow-lg z-20 py-1 text-xs">
+                <div className="absolute right-0 mt-1.5 w-36 bg-white border border-slate-200 rounded-xl shadow-lg z-20 py-1 text-xs text-slate-700">
                   {(['Last 12 Days', 'Last 30 Days', 'Quarterly'] as const).map((opt) => (
                     <button
                       key={opt}
@@ -210,8 +210,8 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
                         setTimeRange(opt);
                         setIsTimeDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 transition-colors ${
-                        timeRange === opt ? 'bg-black text-white font-bold' : 'text-slate-700 hover:bg-slate-100'
+                      className={`w-full text-left px-3 py-2 font-bold transition-colors ${
+                        timeRange === opt ? 'bg-sky-600 text-white' : 'text-slate-700 hover:bg-sky-50'
                       }`}
                     >
                       {opt}
@@ -222,16 +222,16 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Interactive Responsive SVG Line Chart (Black highlight line & points) */}
+          {/* Interactive Responsive SVG Line Chart (Meteorological sky blue highlight line & points) */}
           <div className="mt-6 relative w-full overflow-x-auto scrollbar-none">
             <svg
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
               className="w-full h-auto min-w-[500px]"
             >
               <defs>
-                <linearGradient id="blackGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#000000" stopOpacity="0.10" />
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0.0" />
+                <linearGradient id="skyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#0284c7" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
@@ -253,14 +253,14 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
               })}
 
               {/* Area gradient under the line */}
-              <path d={fillD} fill="url(#blackGradient)" />
+              <path d={fillD} fill="url(#skyGradient)" />
 
-              {/* The Line - Black Highlight as requested */}
+              {/* The Line - Atmospheric Sky Blue Highlight */}
               <path
                 d={pathD}
                 fill="none"
-                stroke="#000000"
-                strokeWidth="2.75"
+                stroke="#0284c7"
+                strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -283,9 +283,9 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
                     <circle
                       cx={pt.x}
                       cy={pt.y}
-                      r={isHovered ? 6 : 4.5}
-                      fill="#000000"
-                      stroke="#FFFFFF"
+                      r={isHovered ? 7 : 5}
+                      fill={isHovered ? '#0ea5e9' : '#0284c7'}
+                      stroke="#ffffff"
                       strokeWidth="2.5"
                       className="transition-all duration-200"
                     />
@@ -301,7 +301,7 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
                   y={svgHeight - 8}
                   textAnchor="middle"
                   className={`text-[10px] font-sans font-medium transition-colors ${
-                    hoveredPoint?.day === pt.data.day ? 'fill-black font-bold' : 'fill-slate-400'
+                    hoveredPoint?.day === pt.data.day ? 'fill-sky-700 font-bold' : 'fill-slate-400'
                   }`}
                 >
                   {pt.data.day}
@@ -309,24 +309,27 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
               ))}
             </svg>
 
-            {/* Hover Tooltip - Black Highlight */}
+            {/* Hover Tooltip - High-contrast Sky/Navy Highlight */}
             {hoveredPoint && (
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-black text-white px-3 py-1.5 rounded-lg text-xs font-mono shadow-md flex items-center gap-2">
-                <span className="font-bold">{hoveredPoint.day}:</span>
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold shadow-xl flex items-center gap-2">
+                <span className="text-sky-300 font-bold">{hoveredPoint.day}:</span>
                 <span>{hoveredPoint.connections.toLocaleString()} Connections</span>
                 <span className="opacity-70">|</span>
-                <span className="text-emerald-400 font-semibold">{hoveredPoint.bandwidth}</span>
+                <span className="text-emerald-400 font-bold">{hoveredPoint.bandwidth}</span>
               </div>
             )}
           </div>
         </div>
 
         {/* Right Card: Recent Trainees (lg:col-span-4) matching Figma */}
-        <div className="lg:col-span-4 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col justify-between text-slate-900">
           <div>
-            <h3 className="text-base font-bold text-black tracking-tight">
+            <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
               Recent Trainees
             </h3>
+            <p className="text-xs font-medium text-slate-500 mt-0.5">
+              Live roster of deployed operational cadets.
+            </p>
 
             <div className="mt-5 space-y-4">
               {recentTrainees.map((trainee) => (
@@ -335,7 +338,7 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
                   className="flex items-center justify-between pb-3.5 border-b border-slate-100 last:border-0 last:pb-0"
                 >
                   <div>
-                    <h4 className="text-sm font-bold text-black leading-snug">
+                    <h4 className="text-sm font-bold text-slate-900 leading-snug">
                       {trainee.name}
                     </h4>
                     <p className="text-xs text-slate-500 mt-0.5">
@@ -344,8 +347,8 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0 pl-2">
-                    <span className={`w-2 h-2 rounded-full ${trainee.statusColor}`} />
-                    <span className={`text-xs font-semibold ${
+                    <span className={`w-2.5 h-2.5 rounded-full ${trainee.statusColor} shadow-xs`} />
+                    <span className={`text-xs font-bold ${
                       trainee.status === 'Active' ? 'text-emerald-600' :
                       trainee.status === 'Pending' ? 'text-amber-600' : 'text-slate-400'
                     }`}>
@@ -359,7 +362,7 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
 
           <button
             onClick={onNavigateToTrainees}
-            className="mt-6 w-full py-2.5 rounded-xl border border-slate-200 hover:border-black text-xs font-bold text-black hover:bg-slate-50 transition-all text-center"
+            className="mt-6 w-full py-2.5 rounded-xl border border-slate-200 hover:border-sky-400 text-xs font-bold text-slate-700 hover:text-sky-900 hover:bg-sky-50 transition-all text-center cursor-pointer shadow-2xs"
           >
             View All Trainees Roster
           </button>
@@ -367,23 +370,23 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
       </div>
 
       {/* Operational Telemetry: National Radar Stations Network */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs">
+      <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 shadow-xs text-slate-900">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <h3 className="text-base font-bold text-black tracking-tight">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
                 National Doppler Weather Radar (DWR) Telemetry
               </h3>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs font-medium text-slate-500 mt-0.5">
               Real-time operational readiness & simulated training capacity across Indian zones.
             </p>
           </div>
 
           <button
             onClick={onOpenDrill}
-            className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0"
+            className="px-4 py-2 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
           >
             Launch Crisis Drill
           </button>
@@ -394,12 +397,12 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
             <div
               key={station.id}
               onClick={() => onSelectStation(station)}
-              className="border border-slate-200 rounded-xl p-4 hover:border-black transition-all cursor-pointer group bg-slate-50/50 hover:bg-white"
+              className="border border-slate-200/90 hover:border-sky-400 rounded-xl p-4 transition-all cursor-pointer group bg-slate-50/70 hover:bg-white shadow-2xs"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Radio className="w-4 h-4 text-black group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-bold text-black">{station.name}</span>
+                  <Radio className="w-4 h-4 text-sky-600 group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-bold text-slate-900">{station.name}</span>
                 </div>
                 <span className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded ${
                   station.alertLevel === 'Red' ? 'bg-rose-100 text-rose-800' :
@@ -411,18 +414,18 @@ export const FigmaDashboardView: React.FC<FigmaDashboardViewProps> = ({
               </div>
 
               <div className="mt-3 flex items-baseline justify-between text-xs">
-                <span className="text-slate-500">Readiness:</span>
-                <span className="font-mono font-bold text-black">{station.readinessScore}%</span>
+                <span className="text-slate-500 font-medium">Readiness:</span>
+                <span className="font-mono font-bold text-slate-900">{station.readinessScore}%</span>
               </div>
 
-              <div className="w-full bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
+              <div className="w-full bg-slate-100 h-2 rounded-full mt-1.5 overflow-hidden">
                 <div
-                  className="bg-black h-full rounded-full transition-all"
+                  className="bg-gradient-to-r from-sky-500 to-blue-600 h-full rounded-full transition-all"
                   style={{ width: `${station.readinessScore}%` }}
                 />
               </div>
 
-              <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+              <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 font-mono font-medium">
                 <span>{station.activeTrainees} Active Cadets</span>
                 <span>{station.certifiedForecasters} Certified</span>
               </div>

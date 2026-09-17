@@ -26,10 +26,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      document.body.className = 'bg-[#070b14] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200';
+      document.body.className = 'bg-[#060a17] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200';
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.className = 'bg-slate-100 text-slate-800 antialiased selection:bg-sky-500/30 selection:text-sky-800';
+      document.body.className = 'bg-pink-blue-mesh text-slate-900 antialiased selection:bg-sky-500/30 selection:text-sky-900';
     }
   }, [theme]);
 

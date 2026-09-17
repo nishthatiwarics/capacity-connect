@@ -1,6 +1,6 @@
 {
-  "name": "Remix Capacity Connect — IMD Meteorological Training \u0026 Command Portal",
-  "description": "Next-generation workforce development \u0026 operational weather command portal for the India Meteorological Department (MoES), featuring student streak tracking with animal ranks (Raccoon, Baby Cheetah, Champ Lions, Star Dolphins), dedicated Admin, Trainer, and Trainee dashboards, teacher resume platform \u0026 recruitment, free demo video lecture studio, Doppler radar simulator, and Hachiware (Chiikawa) Teacher AI Guide.",
+  "name": "Capacity Connect — IMD Training Portal",
+  "description": "Next-generation workforce development & operational weather command portal for the India Meteorological Department (MoES), featuring student streak tracking with animal ranks, dedicated Admin, Trainer, and Trainee dashboards, teacher resume platform & recruitment, free demo video lecture studio, Doppler radar simulator, and Hachiware Teacher AI Guide.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -24,7 +24,7 @@ export const QUIZ_MASCOTS: QuizMascot[] = [
     id: 'cadet_mentor',
     name: 'Cadet Mentor Rohan',
     title: 'Foundational Weather Trainee (Level 1)',
-    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     emoji: '🔰',
     themeColor: 'from-slate-500 to-indigo-600',
     catchphrase: 'Mastering every reflectivity dBZ contour from the ground up!'
@@ -33,7 +33,7 @@ export const QUIZ_MASCOTS: QuizMascot[] = [
     id: 'radar_specialist',
     name: 'Specialist Ananya',
     title: 'Doppler Radar Specialist (Level 2)',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     emoji: '📡',
     themeColor: 'from-amber-500 to-orange-600',
     catchphrase: 'Sharp velocity dipoles and rapid nowcasting precision!'
@@ -42,7 +42,7 @@ export const QUIZ_MASCOTS: QuizMascot[] = [
     id: 'cyclone_lead',
     name: 'Forecaster Vikram',
     title: 'Severe Cyclone Warning Lead (Level 3)',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     emoji: '🌪️',
     themeColor: 'from-rose-500 to-red-600',
     catchphrase: 'Standing vigilant through every cyclone eyewall!'
@@ -51,7 +51,7 @@ export const QUIZ_MASCOTS: QuizMascot[] = [
     id: 'chief_scientist',
     name: 'Dr. K. Ramanathan',
     title: 'Chief Atmospheric Scientist (Level 4)',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     emoji: '💠',
     themeColor: 'from-sky-400 to-cyan-500',
     catchphrase: 'Deciphering planetary wave dynamics with master-level rigor!'

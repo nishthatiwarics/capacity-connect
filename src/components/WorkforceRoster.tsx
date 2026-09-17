@@ -123,7 +123,7 @@ export const WorkforceRoster: React.FC<WorkforceRosterProps> = ({
       stationId: stationObj.id,
       stationName: stationObj.name,
       role: newRole,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      avatar: '',
       level: 1,
       levelTitle: 'Ground Observer',
       xp: 500,
@@ -269,13 +269,13 @@ export const WorkforceRoster: React.FC<WorkforceRosterProps> = ({
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <img
-                      src={trainee.avatar}
-                      alt={trainee.name}
-                      className={`w-11 h-11 rounded-full object-cover border-2 ${
-                        isBright ? 'border-sky-400' : 'border-cyan-500/40'
-                      }`}
-                    />
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xs border ${
+                      isBright
+                        ? 'bg-slate-100 border-slate-300 text-slate-700'
+                        : 'bg-slate-800 border-slate-700 text-slate-200'
+                    }`}>
+                      {trainee.name.replace(/^(Dr\.|Prof\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    </div>
                     <span className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border flex items-center justify-center text-[9px] font-bold font-mono ${
                       isBright 
                         ? 'bg-white border-sky-300 text-sky-700 shadow-xs' 
@@ -383,11 +383,11 @@ export const WorkforceRoster: React.FC<WorkforceRosterProps> = ({
             {/* Header */}
             <div className={`flex items-start justify-between pb-3 border-b ${isBright ? 'border-slate-200' : 'border-slate-800'}`}>
               <div className="flex items-center gap-3">
-                <img
-                  src={selectedTrainee.avatar}
-                  alt={selectedTrainee.name}
-                  className={`w-14 h-14 rounded-full object-cover border-2 ${isBright ? 'border-sky-500' : 'border-cyan-500'}`}
-                />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center font-bold text-base border ${
+                  isBright ? 'bg-slate-100 border-slate-300 text-slate-700' : 'bg-slate-800 border-slate-700 text-slate-200'
+                }`}>
+                  {selectedTrainee.name.replace(/^(Dr\.|Prof\.)\s*/, '').split(' ').map(n => n[0]).join('').slice(0, 2)}
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className={`text-lg font-bold ${isBright ? 'text-slate-900' : 'text-white'}`}>{selectedTrainee.name}</h3>

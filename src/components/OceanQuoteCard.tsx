@@ -36,8 +36,14 @@ export const OceanQuoteCard: React.FC<OceanQuoteCardProps> = ({ variant = 'card'
     setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
   };
 
-  const handleCopyQuote = () => {
-    navigator.clipboard?.writeText(`"${current.quote}" — ${current.author}`);
+  const handleCopyQuote = async () => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(`"${current.quote}" — ${current.author}`);
+      }
+    } catch {
+      // Fallback or ignore in iframe environments
+    }
     setCopied(true);
     sound.playSuccess();
     setTimeout(() => setCopied(false), 2000);
@@ -45,7 +51,7 @@ export const OceanQuoteCard: React.FC<OceanQuoteCardProps> = ({ variant = 'card'
 
   if (variant === 'banner') {
     return (
-      <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-r from-pink-500/10 via-sky-500/10 to-blue-500/15 border border-pink-200/60 backdrop-blur-md p-4 sm:p-5 shadow-xs ${className}`}>
+      <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-50 via-white to-blue-50/80 border border-sky-200/90 backdrop-blur-md p-4 sm:p-5 shadow-2xs text-slate-800 ${className}`}>
         {/* Decorative background waves */}
         <div className="absolute -right-6 -bottom-6 w-32 h-32 opacity-20 pointer-events-none text-sky-500">
           <Waves className="w-full h-full" />
@@ -53,36 +59,36 @@ export const OceanQuoteCard: React.FC<OceanQuoteCardProps> = ({ variant = 'card'
         
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
           <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-sky-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-              <Quote className="w-5 h-5 fill-white/30" />
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs border border-sky-300">
+              <Quote className="w-6 h-6 fill-white/40" />
             </div>
             <div>
-              <p className="text-sm sm:text-base font-medium text-slate-800 tracking-tight leading-snug">
+              <p className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight leading-snug">
                 "{current.quote}"
               </p>
-              <p className="text-xs font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                <span>— {current.author}</span>
-                <span className="text-slate-400 hidden md:inline">• {current.subtext}</span>
+              <p className="text-xs font-semibold text-slate-600 mt-1 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                <span className="text-sky-800 font-bold">— {current.author}</span>
+                <span className="text-slate-500 hidden md:inline">• {current.subtext}</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+          <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
             <button
               onClick={handleCopyQuote}
               title="Copy quote"
-              className="p-1.5 rounded-lg border border-slate-200/80 hover:border-pink-300 bg-white/80 hover:bg-white text-slate-600 hover:text-pink-600 transition-all text-xs flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-sky-300 bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-900 transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
-              <span className="text-[11px] font-medium">{copied ? 'Copied' : 'Share'}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5 text-slate-500" />}
+              <span>{copied ? 'Copied' : 'Share'}</span>
             </button>
             <button
               onClick={handleNextQuote}
               title="Next quote"
-              className="px-2.5 py-1.5 rounded-lg border border-slate-200/80 hover:border-sky-300 bg-white/80 hover:bg-white text-slate-600 hover:text-sky-700 transition-all text-[11px] font-semibold flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl border border-amber-200 hover:border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              <Sparkles className="w-3 h-3 text-amber-500" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
               <span>Next</span>
             </button>
           </div>
@@ -93,39 +99,39 @@ export const OceanQuoteCard: React.FC<OceanQuoteCardProps> = ({ variant = 'card'
 
   // Default card format matching screenshot top right
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-white/90 border border-pink-200/70 shadow-xs p-5 transition-all hover:shadow-md ${className}`}>
+    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-50 via-white to-blue-50/70 border border-sky-200/90 shadow-2xs p-5 transition-all hover:border-sky-300 text-slate-800 ${className}`}>
       {/* Decorative sun & wave illustration motif matching screenshot */}
-      <div className="absolute top-2 right-2 w-28 h-28 pointer-events-none opacity-90">
+      <div className="absolute top-2 right-2 w-28 h-28 pointer-events-none opacity-85">
         <svg viewBox="0 0 120 120" fill="none" className="w-full h-full">
           {/* Sun with rays */}
-          <circle cx="95" cy="25" r="14" fill="#FDE047" fillOpacity="0.8" />
-          <path d="M95 5V9M95 41V45M75 25H79M111 25H115M81 11L84 14M106 36L109 39M81 39L84 36M106 14L109 11" stroke="#EAB308" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="95" cy="25" r="14" fill="#FDE047" fillOpacity="0.9" />
+          <path d="M95 5V9M95 41V45M75 25H79M111 25H115M81 11L84 14M106 36L109 39M81 39L84 36M106 14L109 11" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
           {/* Ocean whale tail & waves */}
-          <path d="M30 95 C 45 80, 65 85, 80 75 C 95 65, 105 85, 115 80" stroke="#38BDF8" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M15 105 C 35 90, 60 100, 85 92 C 100 87, 110 98, 120 95" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
+          <path d="M30 95 C 45 80, 65 85, 80 75 C 95 65, 105 85, 115 80" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" />
+          <path d="M15 105 C 35 90, 60 100, 85 92 C 100 87, 110 98, 120 95" stroke="#0284c7" strokeWidth="2.5" strokeLinecap="round" />
           {/* Whale silhouette */}
-          <path d="M70 76 C 75 70, 82 66, 90 70 C 86 64, 88 56, 96 52 C 86 54, 82 62, 78 66 C 74 62, 68 62, 64 68 C 66 73, 68 75, 70 76 Z" fill="#0369A1" fillOpacity="0.85" />
+          <path d="M70 76 C 75 70, 82 66, 90 70 C 86 64, 88 56, 96 52 C 86 54, 82 62, 78 66 C 74 62, 68 62, 64 68 C 66 73, 68 75, 70 76 Z" fill="#0284c7" fillOpacity="0.75" />
         </svg>
       </div>
 
       {/* Big quotes icon */}
-      <div className="text-3xl font-serif text-pink-500 font-bold leading-none select-none mb-1">
+      <div className="text-3xl font-serif text-sky-600 font-black leading-none select-none mb-1">
         “
       </div>
 
-      <p className="text-slate-800 text-sm font-medium leading-relaxed pr-8 relative z-10">
+      <p className="text-slate-800 text-sm font-bold leading-relaxed pr-8 relative z-10">
         "{current.quote}"
       </p>
 
-      <div className="mt-3 flex items-center justify-between pt-2 border-t border-slate-100 relative z-10">
-        <span className="text-xs font-semibold text-slate-500 tracking-tight">
+      <div className="mt-4 flex items-center justify-between pt-3 border-t border-slate-200/80 relative z-10">
+        <span className="text-xs font-bold text-sky-800 tracking-tight">
           — {current.author}
         </span>
         <button
           onClick={handleNextQuote}
-          className="text-[11px] font-medium text-sky-600 hover:text-sky-800 flex items-center gap-1 cursor-pointer"
+          className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1.5 cursor-pointer bg-sky-50 px-2.5 py-1 rounded-xl border border-sky-200 hover:bg-sky-100 transition-all shadow-2xs"
         >
-          <Sparkles className="w-3 h-3 text-amber-500" />
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
           <span>Inspire</span>
         </button>
       </div>

@@ -308,6 +308,99 @@ Verified by India Meteorological Department (MoES), Government of India.
               </div>
             </div>
           )}
+
+          {/* Trainee Reviews & Feedback Section */}
+          <div className={`p-4 rounded-2xl border ${
+            isBright ? 'bg-amber-50/40 border-amber-200' : 'bg-[#0f172a] border-slate-800'
+          }`}>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
+                  Trainee Feedback & Faculty Q&A
+                </h4>
+              </div>
+              <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold">
+                WMO Accredited Peer Review
+              </span>
+            </div>
+
+            {/* Quick Trainee Feedback Submission */}
+            <div className="p-3 rounded-xl bg-white dark:bg-[#0c1426] border border-slate-200 dark:border-slate-800 space-y-2 mb-3">
+              <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                Leave Trainee Feedback for {lecture.teacherName}:
+              </span>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => {
+                        sound.playBlip(600 + star * 50);
+                      }}
+                      className="text-amber-400 hover:scale-110 transition-all cursor-pointer"
+                    >
+                      <Star className="w-4 h-4 fill-current" />
+                    </button>
+                  ))}
+                </div>
+                <span className="text-[10px] font-mono text-slate-400">Rate 5/5</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Share what was helpful or ask a question on this lecture..."
+                  className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-amber-500"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                      sound.playSuccess();
+                      if (onAwardXP) onAwardXP(25, `Provided Trainee Feedback on: "${lecture.title}"`);
+                      e.currentTarget.value = '';
+                      alert("Thank you! Your feedback has been sent to the faculty and added to the Course Hub.");
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                    if (input && input.value.trim()) {
+                      sound.playSuccess();
+                      if (onAwardXP) onAwardXP(25, `Provided Trainee Feedback on: "${lecture.title}"`);
+                      input.value = '';
+                      alert("Thank you! Your feedback has been sent to the faculty and added to the Course Hub.");
+                    }
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-2xs cursor-pointer shrink-0"
+                >
+                  Submit (+25 XP)
+                </button>
+              </div>
+            </div>
+
+            {/* Sample Recent Feedback */}
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-1">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">Cadet Julianne Moore (Santacruz DWR)</span>
+                  <span className="text-amber-500 font-bold">5.0 ★</span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-300">
+                  "The real convective cell case study from Pune at minute 28:10 made dual-polarization differentiation completely clear. Highly recommended for Level 2 cadets."
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-1">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">Cadet Rajesh Sharma (Delhi HQ)</span>
+                  <span className="text-amber-500 font-bold">5.0 ★</span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-300">
+                  "Downloadable markdown notes and timestamps helped me prepare for the Nyquist velocity exam. Dr. Rao's pacing was just right."
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
