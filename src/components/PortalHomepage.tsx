@@ -40,10 +40,12 @@ export const PortalHomepage: React.FC<PortalHomepageProps> = ({ onLogin }) => {
   const [traineeEmail, setTraineeEmail] = useState('cadet.julianne@imd.gov.in');
   const [traineePassword, setTraineePassword] = useState('cadet2026');
   const [showTraineePass, setShowTraineePass] = useState(false);
+  const [traineeAuthError, setTraineeAuthError] = useState('');
 
   const [trainerEmail, setTrainerEmail] = useState('faculty.someshwar@imd.gov.in');
   const [trainerPassword, setTrainerPassword] = useState('faculty2026');
   const [showTrainerPass, setShowTrainerPass] = useState(false);
+  const [trainerAuthError, setTrainerAuthError] = useState('');
 
   const [adminEmail, setAdminEmail] = useState('dg.mohapatra@imd.gov.in');
   const [adminPin, setAdminPin] = useState('IMD-ADMIN');
@@ -59,9 +61,37 @@ export const PortalHomepage: React.FC<PortalHomepageProps> = ({ onLogin }) => {
   };
 
   const handleLoginSubmit = (role: UserRole) => {
+    if (role === 'Trainee') {
+      if (!traineeEmail.trim() || !traineeEmail.includes('@')) {
+        sound.playAlert();
+        setTraineeAuthError('Please enter a valid government email address.');
+        return;
+      }
+      if (traineePassword.trim().length < 4) {
+        sound.playAlert();
+        setTraineeAuthError('Invalid password. Minimum 4 characters required.');
+        return;
+      }
+      setTraineeAuthError('');
+    }
+
+    if (role === 'Trainer') {
+      if (!trainerEmail.trim() || !trainerEmail.includes('@')) {
+        sound.playAlert();
+        setTrainerAuthError('Please enter a valid faculty email address.');
+        return;
+      }
+      if (trainerPassword.trim().length < 4) {
+        sound.playAlert();
+        setTrainerAuthError('Invalid password. Minimum 4 characters required.');
+        return;
+      }
+      setTrainerAuthError('');
+    }
+
     if (role === 'Admin') {
       const normalizedPin = adminPin.trim().toUpperCase();
-      if (normalizedPin !== 'IMD-ADMIN' && normalizedPin !== '1947' && normalizedPin !== 'ADMIN') {
+      if (normalizedPin !== 'IMD-ADMIN' && normalizedPin !== '1947' && normalizedPin !== 'ADMIN' && normalizedPin !== '1234') {
         sound.playAlert();
         setAdminPinError('Invalid Directorate PIN. Use IMD-ADMIN for authorized access.');
         return;
@@ -313,6 +343,12 @@ export const PortalHomepage: React.FC<PortalHomepageProps> = ({ onLogin }) => {
                       {showTraineePass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {traineeAuthError && (
+                    <div className="mt-1 text-xs text-rose-500 font-bold flex items-center gap-1">
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{traineeAuthError}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -421,6 +457,12 @@ export const PortalHomepage: React.FC<PortalHomepageProps> = ({ onLogin }) => {
                       {showTrainerPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {trainerAuthError && (
+                    <div className="mt-1 text-xs text-rose-500 font-bold flex items-center gap-1">
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{trainerAuthError}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
