@@ -697,14 +697,21 @@ export default function App() {
               <ChevronDown className="w-3 h-3" />
             </button>
 
-            {/* Upload Demo Lecture */}
-            <button
-              onClick={() => setIsUploadLectureOpen(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white transition-all shadow-2xs cursor-pointer"
-            >
-              <Video className="w-3.5 h-3.5" />
-              <span>Upload Demo Lecture</span>
-            </button>
+            {/* Upload Demo Lecture (Restricted strictly to Trainers) */}
+            {currentRole === 'Trainer' && (
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playBlip(700);
+                  setIsUploadLectureOpen(true);
+                }}
+                className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white transition-all shadow-2xs cursor-pointer active:scale-95"
+                title="Upload a new video masterclass with chapters and lecture notes (Trainer Only)"
+              >
+                <Video className="w-3.5 h-3.5" />
+                <span>+ Upload Lecture</span>
+              </button>
+            )}
           </div>
         </div>
 
