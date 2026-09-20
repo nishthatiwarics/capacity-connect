@@ -24,9 +24,11 @@ import {
   FileCheck,
   ShieldCheck
 } from 'lucide-react';
-import { TeacherProfile, DemoLecture, FacultyJobOpening, ApprovalRequest } from '../types';
+import { TeacherProfile, DemoLecture, FacultyJobOpening, ApprovalRequest, TrainerQuestionnaire } from '../types';
 import { sound } from '../utils/audio';
 import { useTheme } from '../context/ThemeContext';
+import { TrainerQuestionnaireManager } from './TrainerQuestionnaireManager';
+import { INITIAL_TRAINER_QUESTIONNAIRES, INITIAL_TRAINEE_SUBMISSIONS } from '../data/sihPortalData';
 
 interface TrainerDashboardProps {
   teacher: TeacherProfile;
@@ -57,8 +59,12 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
 }) => {
   const { isBright } = useTheme();
 
-  const [activeSubTab, setActiveSubTab] = useState<'resume' | 'lectures' | 'recruitment' | 'requisitions'>('resume');
+  const [activeSubTab, setActiveSubTab] = useState<'questionnaires' | 'resume' | 'lectures' | 'recruitment' | 'requisitions'>('questionnaires');
   const [isEditingResume, setIsEditingResume] = useState(false);
+
+  // SIH Questionnaires state
+  const [questionnaires, setQuestionnaires] = useState<TrainerQuestionnaire[]>(INITIAL_TRAINER_QUESTIONNAIRES);
+  const [submissions, setSubmissions] = useState(INITIAL_TRAINEE_SUBMISSIONS);
 
   // New Requisition Form State
   const [reqCategory, setReqCategory] = useState<ApprovalRequest['category']>('Radar Research Transmission Slot');
@@ -141,23 +147,22 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Welcome / Faculty Profile Header Card */}
-      <div className={`p-6 rounded-2xl border transition-all ${
-        isBright
-          ? 'bg-white border-slate-200 shadow-sm'
-          : 'bg-[#0d1629] border-cyan-900/40 shadow-xl'
-      }`}>
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      {/* Top Welcome / Faculty Profile Header Card (PRYDA Radiant Aqua Glass Style) */}
+      <div className="p-7 sm:p-8 rounded-[32px] pryda-glass-tray relative transition-all shadow-xl">
+        <div className="absolute -top-16 -right-16 w-64 h-64 liquid-glass-bloom-cyan rounded-full pointer-events-none opacity-50 blur-2xl" />
+        <div className="absolute -bottom-16 -left-16 w-64 h-64 liquid-glass-bloom-emerald rounded-full pointer-events-none opacity-30 blur-2xl" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex items-start sm:items-center gap-4">
             <div className="relative shrink-0">
               {teacher.avatar ? (
                 <img
                   src={teacher.avatar}
                   alt={teacher.name}
-                  className="w-20 h-20 rounded-2xl object-cover border-2 border-black shadow-xs"
+                  className="w-20 h-20 rounded-2xl object-cover border-2 border-sky-400/60 shadow-md"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-xl text-slate-800 dark:text-slate-100 shadow-xs">
+                <div className="w-20 h-20 rounded-2xl bg-sky-500/20 border-2 border-sky-400/60 flex items-center justify-center font-black text-xl text-sky-800 dark:text-sky-200 shadow-md">
                   {teacher.name.replace(/^(Dr\.|Prof\.)\s*/, '').split(' ').map((n) => n[0]).join('').slice(0, 2)}
                 </div>
               )}
@@ -168,34 +173,32 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
 
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className={`text-xl font-bold tracking-tight ${isBright ? 'text-slate-900' : 'text-white'}`}>
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-white">
                   {teacher.name}
                 </h1>
-                <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded-full border ${
-                  isBright ? 'bg-slate-100 text-black border-slate-300' : 'bg-slate-900 text-white border-slate-700'
-                }`}>
-                  Trainer / Instructor Portal
+                <span className="px-2.5 py-0.5 text-[10px] font-mono font-black uppercase rounded-full liquid-glass-pill liquid-glass-pill-sky text-white">
+                  Faculty / Trainer Portal
                 </span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 rounded-full flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" />
-                  MoES Verified
+                <span className="px-2.5 py-0.5 text-[10px] font-black liquid-glass-pill-frosted border border-emerald-400/60 text-emerald-900 dark:text-emerald-300 rounded-full flex items-center gap-1 shadow-2xs">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  MoES & IMD Verified
                 </span>
               </div>
 
-              <p className="text-xs font-semibold text-black dark:text-white mt-1">
+              <p className="text-xs font-black text-slate-950 dark:text-cyan-200 mt-1">
                 {teacher.title}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-500 dark:text-slate-400">
-                <span className="flex items-center gap-1">
-                  <Building className="w-3.5 h-3.5" />
+              <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-800 dark:text-slate-200 font-bold">
+                <span className="flex items-center gap-1 text-slate-950 dark:text-slate-100 font-black">
+                  <Building className="w-3.5 h-3.5 text-sky-600" />
                   {teacher.institution}
                 </span>
                 <span>•</span>
-                <span>{teacher.experienceYears} Years Experience</span>
+                <span className="font-extrabold text-slate-900 dark:text-slate-200">{teacher.experienceYears} Years Faculty Experience</span>
                 <span>•</span>
-                <span className="flex items-center gap-1 text-amber-500 font-semibold">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span className="flex items-center gap-1 text-amber-700 dark:text-amber-400 font-black">
+                  <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                   {teacher.rating} / 5.0 Rating
                 </span>
               </div>
@@ -203,16 +206,16 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
           </div>
 
           {/* Organized Trainer Actions & Status Controls */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-            {/* Group 1: Primary Publishing Actions (High Visibility) */}
-            <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-100/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+          <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            {/* Group 1: Primary Publishing Actions */}
+            <div className="flex items-center gap-2 p-1 rounded-2xl liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-xs">
               <button
                 type="button"
                 onClick={() => {
                   sound.playBlip(700);
                   onOpenUploadLecture();
                 }}
-                className="flex items-center gap-2 px-3.5 py-2 text-xs font-black rounded-lg transition-all shadow-sm bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 text-xs font-black rounded-full liquid-glass-pill liquid-glass-pill-emerald text-white transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
                 title="Upload new free demo video lecture for trainees"
               >
                 <Video className="w-4 h-4" />
@@ -226,7 +229,7 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
                     sound.playBlip(700);
                     onOpenUploadStudyMaterial();
                   }}
-                  className="flex items-center gap-2 px-3.5 py-2 text-xs font-black rounded-lg transition-all shadow-sm bg-purple-600 hover:bg-purple-500 text-white cursor-pointer active:scale-95"
+                  className="flex items-center gap-2 px-4 py-2 text-xs font-black rounded-full liquid-glass-pill liquid-glass-pill-purple text-white transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
                   title="Upload SOP, radar debrief, or training manual to the Study Vault"
                 >
                   <FileText className="w-4 h-4" />
@@ -243,14 +246,10 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
                   sound.playBlip(600);
                   onViewTeacherResume(teacher);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  isBright
-                    ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-800 shadow-2xs'
-                    : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
-                }`}
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-extrabold rounded-full liquid-glass-pill-frosted border border-sky-300/80 text-sky-950 dark:text-sky-200 transition-all cursor-pointer shadow-xs hover:scale-105"
               >
                 <FileCheck className="w-3.5 h-3.5 text-sky-600 dark:text-cyan-400" />
-                <span>My Resume</span>
+                <span>Faculty Dossier</span>
               </button>
 
               <button
@@ -259,10 +258,10 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
                   sound.playBlip(650);
                   handleToggleRecruitmentStatus();
                 }}
-                className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                className={`px-3.5 py-2 text-xs font-black rounded-full transition-all cursor-pointer shadow-xs hover:scale-105 ${
                   teacher.recruitmentStatus === 'Available for Recruitment'
-                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-400'
-                    : 'bg-amber-50 border-amber-300 text-amber-700 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-400'
+                    ? 'liquid-glass-pill-frosted border border-emerald-400 text-emerald-950 dark:text-emerald-300'
+                    : 'liquid-glass-pill-frosted border border-amber-400 text-amber-950 dark:text-amber-300'
                 }`}
                 title="Click to toggle availability on the IMD Recruitment Job Board"
               >
@@ -273,30 +272,28 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
         </div>
 
         {/* Quick KPI Stats Bar */}
-        <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t ${
-          isBright ? 'border-slate-200' : 'border-slate-800'
-        }`}>
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Published Lectures</span>
-            <div className="text-xl font-bold text-black dark:text-white mt-0.5">
+        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-white/70 dark:border-white/15">
+          <div className="p-3.5 rounded-2xl pryda-glass-card shadow-2xs">
+            <span className="text-[11px] text-slate-800 dark:text-slate-300 font-extrabold">Published Lectures</span>
+            <div className="text-xl font-black text-slate-950 dark:text-white mt-0.5">
               {teacherLectures.length || 2} Free Videos
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Students Mentored</span>
-            <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+          <div className="p-3.5 rounded-2xl pryda-glass-card shadow-2xs">
+            <span className="text-[11px] text-slate-800 dark:text-slate-300 font-extrabold">Students Mentored</span>
+            <div className="text-xl font-black text-emerald-700 dark:text-emerald-400 mt-0.5">
               {teacher.studentsTrained}+ Trainees
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Research Publications</span>
-            <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">
+          <div className="p-3.5 rounded-2xl pryda-glass-card shadow-2xs">
+            <span className="text-[11px] text-slate-800 dark:text-slate-300 font-extrabold">Research Publications</span>
+            <div className="text-xl font-black text-indigo-700 dark:text-indigo-400 mt-0.5">
               {teacher.publicationsCount} Papers
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">IMD Job Applications</span>
-            <div className="text-xl font-bold text-amber-600 dark:text-amber-400 mt-0.5">
+          <div className="p-3.5 rounded-2xl pryda-glass-card shadow-2xs">
+            <span className="text-[11px] text-slate-800 dark:text-slate-300 font-extrabold">IMD Job Applications</span>
+            <div className="text-xl font-black text-amber-700 dark:text-amber-400 mt-0.5">
               {teacher.appliedJobIds.length} Active Posts
             </div>
           </div>
@@ -304,20 +301,20 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
       </div>
 
       {/* Sub-Navigation for Trainer Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-xs">
         <button
           onClick={() => {
             sound.playBlip(600);
             setActiveSubTab('resume');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'resume'
-              ? 'bg-black text-white shadow-xs'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>My Resume & Credentials</span>
+          <span>Faculty Resume & Credentials</span>
         </button>
 
         <button
@@ -325,10 +322,10 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
             sound.playBlip(650);
             setActiveSubTab('lectures');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'lectures'
-              ? 'bg-black text-white shadow-xs'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Video className="w-4 h-4" />
@@ -340,10 +337,10 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
             sound.playBlip(700);
             setActiveSubTab('recruitment');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'recruitment'
-              ? 'bg-black text-white shadow-xs'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100'
+              ? 'liquid-glass-pill liquid-glass-pill-emerald text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Briefcase className="w-4 h-4" />
@@ -355,16 +352,16 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = ({
             sound.playBlip(600);
             setActiveSubTab('requisitions');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'requisitions'
-              ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100'
+              ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Send className="w-4 h-4" />
-          <span>Requisitions to DG ({approvalRequests.filter((r) => r.requesterRole === 'Trainer').length})</span>
+          <span>Faculty Requisitions to DG ({approvalRequests.filter((r) => r.requesterRole === 'Trainer').length})</span>
           {approvalRequests.filter((r) => r.requesterRole === 'Trainer' && r.status === 'Pending').length > 0 && (
-            <span className="px-2 py-0.5 text-[10px] bg-slate-950 text-amber-400 font-bold rounded-full">
+            <span className="px-2 py-0.5 text-[10px] bg-amber-500 text-white font-black rounded-full">
               {approvalRequests.filter((r) => r.requesterRole === 'Trainer' && r.status === 'Pending').length} Pending
             </span>
           )}

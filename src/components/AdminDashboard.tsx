@@ -206,30 +206,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Apex Admin Command Banner */}
-      <div className={`p-6 rounded-3xl border transition-all ${
-        isBright
-          ? 'bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white border-slate-700 shadow-xl'
-          : 'bg-gradient-to-r from-[#0a0f1d] via-[#0d1629] to-[#0f1d38] border-cyan-500/40 text-white shadow-2xl'
-      }`}>
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      {/* Top Apex Admin Command Banner (PRYDA Radiant Aqua Glass Style with Lighter Luminous Tones) */}
+      <div className="p-7 sm:p-8 rounded-[32px] pryda-glass-tray relative transition-all shadow-xl">
+        <div className="absolute -top-16 -right-16 w-64 h-64 liquid-glass-bloom-cyan rounded-full pointer-events-none opacity-50 blur-2xl" />
+        <div className="absolute -bottom-16 -left-16 w-64 h-64 liquid-glass-bloom-purple rounded-full pointer-events-none opacity-40 blur-2xl" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border-2 border-amber-400/60 flex items-center justify-center text-amber-400 shrink-0 shadow-[0_0_20px_rgba(251,191,36,0.25)]">
+            <div className="w-16 h-16 rounded-2xl bg-sky-500/20 border border-sky-400/60 flex items-center justify-center text-sky-600 dark:text-sky-300 shrink-0 shadow-md">
               <Shield className="w-8 h-8" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400/20 border border-amber-400/40 text-amber-300">
-                  Apex Supreme Governance
+                <span className="liquid-glass-pill liquid-glass-pill-sky px-3 py-0.5 text-[10px] font-mono font-black uppercase tracking-wider text-white">
+                  Apex Directorate Command
                 </span>
-                <span className="text-xs text-slate-300 font-mono">
+                <span className="text-xs text-slate-950 dark:text-sky-200 font-mono font-black">
                   Mausam Bhawan • New Delhi
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1">
-                Director General Administrative Command Console
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-white mt-1 flex items-center gap-2">
+                <span>Director General Administrative Command Console</span>
+                <span className="liquid-glass-bubble w-3.5 h-3.5" />
               </h2>
-              <p className="text-xs text-slate-300 max-w-2xl mt-0.5">
+              <p className="text-xs text-slate-900 dark:text-slate-200 font-semibold max-w-2xl mt-0.5 leading-relaxed">
                 Full operational oversight: approve requisitions from trainers and trainees, inspect live faculty & cadet dossiers, configure national radar locks, and govern workforce commissioning.
               </p>
             </div>
@@ -237,25 +237,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Quick Apex Status Pills */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md">
-              <div className="text-[10px] font-semibold text-slate-300 uppercase">Pending Approvals</div>
-              <div className="text-base font-black text-amber-400 flex items-center gap-1.5">
+            <div className="px-3.5 py-2 rounded-2xl liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-2xs">
+              <div className="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase">Pending Approvals</div>
+              <div className="text-base font-black text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                 <span>{pendingRequestsCount}</span>
-                <span className="text-xs font-normal text-slate-300">requests</span>
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-400">requests</span>
               </div>
             </div>
 
-            <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md">
-              <div className="text-[10px] font-semibold text-slate-300 uppercase">Awaiting Commission</div>
-              <div className="text-base font-black text-emerald-400 flex items-center gap-1.5">
+            <div className="px-3.5 py-2 rounded-2xl liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-2xs">
+              <div className="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase">Awaiting Commission</div>
+              <div className="text-base font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                 <span>{pendingCommissionCount}</span>
-                <span className="text-xs font-normal text-slate-300">cadets</span>
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-400">cadets</span>
               </div>
             </div>
 
-            <div className="px-3.5 py-2 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md">
-              <div className="text-[10px] font-semibold text-slate-300 uppercase">Network Readiness</div>
-              <div className="text-base font-black text-cyan-400">92%</div>
+            <div className="px-3.5 py-2 rounded-2xl liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-2xs">
+              <div className="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase">Network Readiness</div>
+              <div className="text-base font-black text-sky-600 dark:text-cyan-400">92%</div>
             </div>
 
             <button
@@ -263,7 +263,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 sound.playBlip(700);
                 setActiveTab('system-controls');
               }}
-              className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition-all shadow-lg flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2.5 rounded-full liquid-glass-pill liquid-glass-pill-sky text-white font-black text-xs transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
             >
               <Sliders className="w-4 h-4" />
               <span>System Controls</span>
@@ -273,24 +273,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </div>
 
       {/* Admin Tab Navigation Bar */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-xs">
         {/* TAB 1: APPROVALS */}
         <button
           onClick={() => {
             sound.playBlip(600);
             setActiveTab('approvals');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeTab === 'approvals'
-              ? 'bg-amber-500 text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-md'
+              : 'text-slate-900 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <CheckCircle2 className="w-4 h-4" />
           <span>Approvals & Requisitions Desk</span>
           {pendingRequestsCount > 0 && (
             <span className={`px-2 py-0.5 text-[10px] font-black rounded-full ${
-              activeTab === 'approvals' ? 'bg-slate-950 text-amber-400' : 'bg-amber-500 text-slate-950'
+              activeTab === 'approvals' ? 'bg-black/30 text-white' : 'bg-amber-500 text-white'
             }`}>
               {pendingRequestsCount} Pending
             </span>
@@ -303,14 +303,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             sound.playBlip(650);
             setActiveTab('analytics-dossiers');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeTab === 'analytics-dossiers'
-              ? 'bg-black text-white dark:bg-cyan-500 dark:text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-md'
+              : 'text-slate-900 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <BarChart3 className="w-4 h-4" />
-          <span>Teacher & Student Stats & Profiles</span>
+          <span>Faculty & Student Stats & Profiles</span>
         </button>
 
         {/* TAB 3: SYSTEM CONTROLS */}
@@ -319,10 +319,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             sound.playBlip(700);
             setActiveTab('system-controls');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeTab === 'system-controls'
-              ? 'bg-black text-white dark:bg-cyan-500 dark:text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-purple text-white shadow-md'
+              : 'text-slate-900 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Sliders className="w-4 h-4" />
@@ -335,10 +335,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             sound.playBlip(600);
             setActiveTab('recruitment');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeTab === 'recruitment'
-              ? 'bg-black text-white dark:bg-cyan-500 dark:text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-emerald text-white shadow-md'
+              : 'text-slate-900 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Briefcase className="w-4 h-4" />
@@ -351,10 +351,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             sound.playBlip(650);
             setActiveTab('commissioning');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeTab === 'commissioning'
-              ? 'bg-black text-white dark:bg-cyan-500 dark:text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-md'
+              : 'text-slate-900 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Lock className="w-4 h-4" />
@@ -367,10 +367,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             sound.playBlip(700);
             setActiveTab('stations');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
             activeTab === 'stations'
-              ? 'bg-black text-white dark:bg-cyan-500 dark:text-slate-950 shadow-md'
-              : 'text-slate-600 hover:text-black hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+              ? 'liquid-glass-pill liquid-glass-pill-cyan text-white shadow-md'
+              : 'text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white'
           }`}
         >
           <Radio className="w-4 h-4" />
@@ -383,9 +383,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       ========================================================================= */}
       {activeTab === 'approvals' && (
         <div className="space-y-6">
-          <div className={`p-6 rounded-2xl border ${
-            isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-          }`}>
+          <div className="p-6 sm:p-7 rounded-[28px] liquid-glass-card">
             {/* Header & Sub-filters */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
               <div>
@@ -393,7 +391,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <h3 className={`text-base font-bold tracking-tight ${isBright ? 'text-slate-900' : 'text-white'}`}>
                     Director General Requisition & Clearance Desk
                   </h3>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400">
+                  <span className="liquid-glass-pill liquid-glass-pill-amber px-2.5 py-0.5 text-[11px] font-bold">
                     Dual Authority: Trainers & Trainees
                   </span>
                 </div>
@@ -410,9 +408,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   placeholder="Search request title, person, category..."
                   value={approvalSearch}
                   onChange={(e) => setApprovalSearch(e.target.value)}
-                  className={`w-full pl-9 pr-3 py-1.5 rounded-xl text-xs border ${
-                    isBright ? 'bg-slate-50 border-slate-200 text-slate-800' : 'bg-slate-900 border-slate-700 text-white'
-                  }`}
+                  className="w-full pl-9 pr-3.5 py-2 text-xs liquid-glass-input rounded-xl focus:outline-none"
                 />
               </div>
             </div>
@@ -642,54 +638,44 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="space-y-6">
           {/* Top Level Macro Statistics Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className={`p-4 rounded-2xl border ${
-              isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-            }`}>
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Faculty Roster</div>
+            <div className="p-5 rounded-2xl liquid-glass-card">
+              <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">Faculty Roster</div>
               <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">{teachers.length} Instructors</div>
-              <div className="text-xs text-slate-500 mt-0.5">{avgTeacherExperience} yrs avg experience</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{avgTeacherExperience} yrs avg experience</div>
             </div>
 
-            <div className={`p-4 rounded-2xl border ${
-              isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-            }`}>
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Cadets & Trainees</div>
+            <div className="p-5 rounded-2xl liquid-glass-card">
+              <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">Active Cadets & Trainees</div>
               <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">{totalTraineesCount} Enrolled</div>
               <div className="text-xs text-emerald-500 font-semibold mt-0.5">{certifiedTraineesCount} fully certified</div>
             </div>
 
-            <div className={`p-4 rounded-2xl border ${
-              isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-            }`}>
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Curriculum Output</div>
+            <div className="p-5 rounded-2xl liquid-glass-card">
+              <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">Curriculum Output</div>
               <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">{totalPublishedLectures} Demo Lectures</div>
-              <div className="text-xs text-slate-500 mt-0.5">{totalTeacherPublications} scientific papers</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{totalTeacherPublications} scientific papers</div>
             </div>
 
-            <div className={`p-4 rounded-2xl border ${
-              isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-            }`}>
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cadet Mastery Level</div>
+            <div className="p-5 rounded-2xl liquid-glass-card">
+              <div className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider">Cadet Mastery Level</div>
               <div className="text-2xl font-black text-amber-500 mt-1">{avgTraineeXP.toLocaleString()} XP Avg</div>
-              <div className="text-xs text-slate-500 mt-0.5">{avgCompletionRate}% syllabus completion</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{avgCompletionRate}% syllabus completion</div>
             </div>
           </div>
 
           {/* Dossier Selector Bar */}
-          <div className={`p-5 rounded-2xl border ${
-            isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-          }`}>
+          <div className="p-6 sm:p-7 rounded-[28px] liquid-glass-card">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2 p-1.5 rounded-full liquid-glass-pill-frosted border border-white/70 dark:border-white/10 shadow-2xs">
                 <button
                   onClick={() => {
                     sound.playBlip(600);
                     setDossierView('teachers');
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     dossierView === 'teachers'
-                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs'
-                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                      ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white'
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -700,10 +686,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     sound.playBlip(600);
                     setDossierView('students');
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     dossierView === 'students'
-                      ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs'
-                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                      ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white'
                   }`}
                 >
                   <Award className="w-4 h-4" />
@@ -719,9 +705,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   placeholder={dossierView === 'teachers' ? "Search teacher by name or skill..." : "Search student by name, badge, station..."}
                   value={dossierView === 'teachers' ? teacherSearch : studentSearch}
                   onChange={(e) => dossierView === 'teachers' ? setTeacherSearch(e.target.value) : setStudentSearch(e.target.value)}
-                  className={`w-full pl-9 pr-3 py-1.5 rounded-xl text-xs border ${
-                    isBright ? 'bg-slate-50 border-slate-200 text-slate-800' : 'bg-slate-900 border-slate-700 text-white'
-                  }`}
+                  className="w-full pl-9 pr-3.5 py-2 rounded-xl text-xs liquid-glass-input focus:outline-none"
                 />
               </div>
             </div>
@@ -924,9 +908,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       ========================================================================= */}
       {activeTab === 'system-controls' && (
         <div className="space-y-6">
-          <div className={`p-6 rounded-2xl border ${
-            isBright ? 'bg-white border-slate-200' : 'bg-[#0d1629] border-slate-800'
-          }`}>
+          <div className="p-6 sm:p-7 rounded-[28px] liquid-glass-card">
             <h3 className={`text-base font-bold tracking-tight mb-1 ${isBright ? 'text-slate-900' : 'text-white'}`}>
               Apex Executive Operations & Telemetry Controls
             </h3>
@@ -936,10 +918,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Control 1: Global Operational Mode vs Crisis Simulation */}
-              <div className={`p-5 rounded-2xl border ${
+              <div className={`p-5 rounded-2xl border transition-all ${
                 isCrisisSimulationMode
-                  ? 'bg-rose-500/10 border-rose-500/40'
-                  : isBright ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/50 border-slate-800'
+                  ? 'bg-rose-500/15 border-rose-400/50 shadow-sm'
+                  : 'liquid-glass-pill-frosted border border-white/60 dark:border-white/10'
               }`}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -953,10 +935,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       sound.playAlarm();
                       setIsCrisisSimulationMode(!isCrisisSimulationMode);
                     }}
-                    className={`px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                       isCrisisSimulationMode
-                        ? 'bg-rose-600 text-white border-rose-500'
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                        ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-xs'
+                        : 'liquid-glass-pill liquid-glass-pill-frosted text-slate-700 dark:text-slate-300'
                     }`}
                   >
                     {isCrisisSimulationMode ? 'ACTIVE: CRISIS DRILL' : 'STANDBY: NORMAL OPS'}
@@ -968,7 +950,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="mt-4">
                   <button
                     onClick={onOpenDrill}
-                    className="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all shadow cursor-pointer"
+                    className="w-full py-2.5 rounded-xl liquid-glass-pill liquid-glass-pill-amber text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
                   >
                     Dispatch Emergency Supercell Cyclone Drill Now
                   </button>
@@ -976,10 +958,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
 
               {/* Control 2: Radar Network Transmission Lock */}
-              <div className={`p-5 rounded-2xl border ${
+              <div className={`p-5 rounded-2xl border transition-all ${
                 radarNetworkTransmissionLocked
-                  ? 'bg-amber-500/10 border-amber-500/40'
-                  : isBright ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/50 border-slate-800'
+                  ? 'bg-amber-500/15 border-amber-400/50 shadow-sm'
+                  : 'liquid-glass-pill-frosted border border-white/60 dark:border-white/10'
               }`}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -993,10 +975,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       sound.playBlip(750);
                       setRadarNetworkTransmissionLocked(!radarNetworkTransmissionLocked);
                     }}
-                    className={`px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                       radarNetworkTransmissionLocked
-                        ? 'bg-amber-600 text-white border-amber-500'
-                        : 'bg-emerald-600 text-white border-emerald-500'
+                        ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-xs'
+                        : 'liquid-glass-pill liquid-glass-pill-emerald text-white shadow-xs'
                     }`}
                   >
                     {radarNetworkTransmissionLocked ? 'LOCKED (SAFETY PROTOCOL)' : 'UNLOCKED (ALL FREQUENCIES)'}
@@ -1012,9 +994,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             {/* Control 3: Mass Weather Flash Warning Alert Dispatcher */}
-            <div className={`mt-6 p-5 rounded-2xl border ${
-              isBright ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/40 border-slate-800'
-            }`}>
+            <div className="mt-6 p-5 sm:p-6 rounded-2xl liquid-glass-pill-frosted border border-white/60 dark:border-white/10">
               <div className="flex items-center gap-2 mb-2">
                 <Bell className="w-5 h-5 text-amber-500" />
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white">

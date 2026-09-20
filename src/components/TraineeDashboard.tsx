@@ -22,10 +22,15 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { Trainee, DemoLecture, Course, StudentProfileData, ApprovalRequest } from '../types';
+import { Trainee, DemoLecture, Course, StudentProfileData, ApprovalRequest, TrainerQuestionnaire } from '../types';
 import { ANIMAL_TIER_CONFIGS } from '../data/studentRankData';
 import { StudentProfileCard } from './StudentProfileCard';
 import { StudentFunQuizArena } from './StudentFunQuizArena';
+import { WeatherForecastingTraineeSuite } from './WeatherForecastingTraineeSuite';
+import { TraineeProfessionalProfileView } from './TraineeProfessionalProfileView';
+import { SubjectWiseMcqAssessmentModal } from './SubjectWiseMcqAssessmentModal';
+import { CourseFeedbackModal } from './CourseFeedbackModal';
+import { INITIAL_TRAINER_QUESTIONNAIRES } from '../data/sihPortalData';
 import { sound } from '../utils/audio';
 import { useTheme } from '../context/ThemeContext';
 
@@ -64,9 +69,27 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
 }) => {
   const { isBright } = useTheme();
 
-  const [activeSubTab, setActiveSubTab] = useState<'profile' | 'quiz-arena' | 'lectures' | 'accreditation' | 'requests'>('profile');
+  const [activeSubTab, setActiveSubTab] = useState<
+    | 'profile'
+    | 'sih-profile'
+    | 'quiz-arena'
+    | 'forecasting-lab'
+    | 'mcq-assessments'
+    | 'lectures'
+    | 'accreditation'
+    | 'requests'
+    | 'course-feedback'
+  >('profile');
   const [lectureFilter, setLectureFilter] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // SIH Questionnaires & Assessment state
+  const [questionnaires, setQuestionnaires] = useState<TrainerQuestionnaire[]>(INITIAL_TRAINER_QUESTIONNAIRES);
+  const [activeAssessmentQuestionnaire, setActiveAssessmentQuestionnaire] = useState<TrainerQuestionnaire | null>(null);
+
+  // SIH Course Feedback state
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [selectedCourseForFeedback, setSelectedCourseForFeedback] = useState<string>('MET-201');
 
   // Trainee Clearance Request Form State
   const [reqCategory, setReqCategory] = useState<ApprovalRequest['category']>('Radar Simulator Clearance');
@@ -88,58 +111,51 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Trainee Cockpit Header */}
-      <div className={`p-6 rounded-2xl border transition-all ${
-        isBright
-          ? 'bg-white border-slate-200 shadow-sm'
-          : 'bg-[#0d1629] border-cyan-900/40 shadow-xl'
-      }`}>
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      {/* Trainee Cockpit Header (PRYDA Radiant Aqua Glass Style) */}
+      <div className="p-7 sm:p-8 rounded-[32px] pryda-glass-tray relative transition-all shadow-xl">
+        <div className="absolute -top-16 -right-16 w-64 h-64 liquid-glass-bloom-cyan rounded-full pointer-events-none opacity-50 blur-2xl" />
+        <div className="absolute -bottom-16 -left-16 w-64 h-64 liquid-glass-bloom-amber rounded-full pointer-events-none opacity-30 blur-2xl" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="relative shrink-0">
               {studentProfile.avatar ? (
                 <img
                   src={studentProfile.avatar}
                   alt={studentProfile.name}
-                  className="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-md"
+                  className="w-20 h-20 rounded-2xl object-cover border-2 border-sky-400/60 shadow-md"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 border-2 border-indigo-500/40 shadow-md text-slate-500 dark:text-slate-400">
+                <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-sky-500/20 border-2 border-sky-400/60 shadow-md text-sky-700 dark:text-sky-300">
                   <User className="w-10 h-10" />
                 </div>
               )}
-              <span className="absolute -bottom-1 -right-1 p-1 bg-indigo-500 rounded-full text-white shadow text-xs">
+              <span className="absolute -bottom-1 -right-1 p-1 bg-sky-500 rounded-full text-white shadow text-xs">
                 👤
               </span>
             </div>
 
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className={`text-xl font-bold tracking-tight ${isBright ? 'text-slate-900' : 'text-white'}`}>
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 dark:text-white">
                   {studentProfile.name}
                 </h1>
-                <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded-full border ${
-                  isBright ? 'bg-indigo-50 text-indigo-700 border-indigo-300' : 'bg-indigo-950 text-indigo-300 border-indigo-700/50'
-                }`}>
+                <span className="px-2.5 py-0.5 text-[10px] font-mono font-black uppercase rounded-full liquid-glass-pill liquid-glass-pill-sky text-white">
                   Trainee Forecaster Cockpit
                 </span>
-                <span className="font-mono text-[11px] text-slate-400">
+                <span className="font-mono text-xs font-black text-slate-950 dark:text-sky-200">
                   {studentProfile.badgeNumber}
                 </span>
               </div>
 
-              <p className="text-xs font-semibold text-sky-600 dark:text-cyan-400 mt-1">
+              <p className="text-xs font-extrabold text-slate-900 dark:text-cyan-300 mt-1">
                 {studentProfile.designation} • {studentProfile.stationName}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-slate-800 dark:text-slate-200 font-bold">
                 <button
                   onClick={() => setActiveSubTab('profile')}
-                  className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border transition-all ${
-                    isBright 
-                      ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100' 
-                      : 'bg-amber-950/60 text-amber-300 border-amber-600/50 hover:bg-amber-900/60'
-                  }`}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold liquid-glass-pill-frosted border border-amber-300/80 dark:border-amber-500/30 text-amber-900 dark:text-amber-300 shadow-2xs hover:scale-105 transition-all cursor-pointer"
                   title="Click to view student competency level and streak profile"
                 >
                   <span className="text-sm">{rankConfig.animalEmoji}</span>
@@ -147,34 +163,41 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
                   <span className="text-[10px] font-mono opacity-80">({rankConfig.tierTag})</span>
                 </button>
 
-                <span className="flex items-center gap-1 text-amber-500 font-bold">
-                  <Flame className="w-3.5 h-3.5 fill-amber-500" />
+                <span className="flex items-center gap-1 text-amber-700 dark:text-amber-400 font-extrabold">
+                  <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                   {studentProfile.dailyStreak}d Study Streak
                 </span>
                 <span>•</span>
-                <span className="font-mono font-semibold text-indigo-500 dark:text-indigo-400">
+                <span className="font-mono font-black text-slate-900 dark:text-sky-300">
                   {studentProfile.lecturesWatched} Lectures Watched
                 </span>
                 <span>•</span>
-                <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="font-mono font-black text-emerald-800 dark:text-emerald-400">
                   {studentProfile.quizzesDone} Quizzes Aced ({studentProfile.quizAverageScore}%)
                 </span>
                 <span>•</span>
-                <span className="font-mono font-semibold text-sky-600 dark:text-cyan-400">
+                <span className="font-mono font-black text-sky-800 dark:text-cyan-300">
                   {studentProfile.xp} XP
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          <div className="relative z-10 flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+            <button
+              onClick={() => {
+                sound.playBlip(700);
+                setActiveSubTab('forecasting-lab');
+              }}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-extrabold rounded-full liquid-glass-pill-frosted border border-sky-300/80 text-sky-950 dark:text-sky-200 transition-all cursor-pointer shadow-xs hover:scale-105"
+            >
+              <Zap className="w-4 h-4 text-amber-500" />
+              <span>Forecasting Lab</span>
+            </button>
+
             <button
               onClick={onOpenRadarLab}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all shadow-sm ${
-                isBright
-                  ? 'bg-sky-600 hover:bg-sky-700 text-white'
-                  : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold shadow-[0_0_15px_rgba(6,182,212,0.3)]'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-black rounded-full liquid-glass-pill liquid-glass-pill-sky text-white transition-all shadow-md cursor-pointer hover:scale-105"
             >
               <Radio className="w-4 h-4" />
               <span>Launch Doppler Lab</span>
@@ -182,13 +205,9 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
 
             <button
               onClick={onOpenDrill}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all border ${
-                isBright
-                  ? 'bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900'
-                  : 'bg-amber-950/40 hover:bg-amber-900/40 border-amber-700/50 text-amber-300'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-extrabold rounded-full liquid-glass-pill-frosted border border-amber-300/80 text-amber-950 dark:text-amber-200 transition-all cursor-pointer shadow-xs hover:scale-105"
             >
-              <ShieldAlert className="w-4 h-4 text-amber-500" />
+              <ShieldAlert className="w-4 h-4 text-amber-600" />
               <span>Emergency Drill</span>
             </button>
 
@@ -201,11 +220,7 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
                   setActiveSubTab('quiz-arena');
                 }
               }}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-black rounded-xl transition-all shadow-md ${
-                isBright
-                  ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white hover:brightness-105 shadow-amber-500/20'
-                  : 'bg-gradient-to-r from-amber-500 to-rose-600 text-white shadow-[0_0_15px_rgba(244,63,94,0.35)] hover:brightness-110'
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-black rounded-full liquid-glass-pill liquid-glass-pill-amber text-white transition-all shadow-md cursor-pointer hover:scale-105"
             >
               <Zap className="w-4 h-4 fill-current animate-bounce text-amber-200" />
               <span>Play Quiz Arena ⚡</span>
@@ -214,56 +229,107 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
         </div>
 
         {/* Competency 6-Axis Preview */}
-        <div className={`grid grid-cols-2 sm:grid-cols-6 gap-2 mt-6 pt-5 border-t ${
-          isBright ? 'border-slate-200' : 'border-slate-800'
-        }`}>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">Radar Echoes</span>
-            <span className="text-sm font-bold text-sky-600 dark:text-cyan-400">{trainee.competency.radarMeteorology}%</span>
+        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-6 gap-2 mt-6 pt-5 border-t border-white/70 dark:border-white/15">
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">Radar Echoes</span>
+            <span className="text-sm font-black text-sky-700 dark:text-cyan-300">{trainee.competency.radarMeteorology}%</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">Satellite</span>
-            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{trainee.competency.satelliteInterpretation}%</span>
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">Satellite</span>
+            <span className="text-sm font-black text-emerald-700 dark:text-emerald-300">{trainee.competency.satelliteInterpretation}%</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">NWP Modeling</span>
-            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{trainee.competency.nwpModeling}%</span>
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">NWP Modeling</span>
+            <span className="text-sm font-black text-indigo-700 dark:text-indigo-300">{trainee.competency.nwpModeling}%</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">Nowcasting</span>
-            <span className="text-sm font-bold text-amber-600 dark:text-amber-400">{trainee.competency.severeNowcasting}%</span>
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">Nowcasting</span>
+            <span className="text-sm font-black text-amber-700 dark:text-amber-300">{trainee.competency.severeNowcasting}%</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">Synoptic</span>
-            <span className="text-sm font-bold text-teal-600 dark:text-teal-400">{trainee.competency.synopticAnalysis}%</span>
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">Synoptic</span>
+            <span className="text-sm font-black text-teal-700 dark:text-teal-300">{trainee.competency.synopticAnalysis}%</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 text-center">
-            <span className="text-[10px] text-slate-400 font-mono block">Agro-Advisory</span>
-            <span className="text-sm font-bold text-rose-600 dark:text-rose-400">{trainee.competency.agroAdvisory}%</span>
+          <div className="p-2.5 rounded-2xl pryda-glass-card text-center shadow-2xs">
+            <span className="text-[10px] text-slate-800 dark:text-slate-300 font-mono font-bold block">Agro-Advisory</span>
+            <span className="text-sm font-black text-rose-700 dark:text-rose-300">{trainee.competency.agroAdvisory}%</span>
           </div>
         </div>
       </div>
 
       {/* Trainee Sub-Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full liquid-glass-pill-frosted border border-white/80 dark:border-white/15 shadow-xs">
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveSubTab('sih-profile');
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+            activeSubTab === 'sih-profile'
+              ? 'liquid-glass-pill liquid-glass-pill-emerald text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
+          }`}
+        >
+          <span>🎓</span>
+          <span>Professional Profile & Credentials</span>
+          <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-black ${
+            activeSubTab === 'sih-profile' ? 'bg-black/30 text-white' : 'bg-emerald-500/20 text-emerald-950 dark:text-emerald-300'
+          }`}>
+            SIH
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveSubTab('mcq-assessments');
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+            activeSubTab === 'mcq-assessments'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
+          }`}
+        >
+          <span>📝</span>
+          <span>Subject-Wise MCQ Assessments</span>
+          <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-black ${
+            activeSubTab === 'mcq-assessments' ? 'bg-black/30 text-white' : 'bg-sky-500/20 text-sky-950 dark:text-sky-300'
+          }`}>
+            {questionnaires.length} Tests
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveSubTab('course-feedback');
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+            activeSubTab === 'course-feedback'
+              ? 'liquid-glass-pill liquid-glass-pill-purple text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
+          }`}
+        >
+          <span>⭐</span>
+          <span>Course Feedback & Review</span>
+        </button>
+
         <button
           onClick={() => {
             sound.playBlip(600);
             setActiveSubTab('profile');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'profile'
-              ? isBright
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-              : isBright
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-400 hover:bg-slate-800/60'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <span className="text-base">{rankConfig.animalEmoji}</span>
-          <span>Competency Rank Profile ({rankConfig.rank})</span>
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300 font-bold">
+          <span>Rank Ladder ({rankConfig.rank})</span>
+          <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-black ${
+            activeSubTab === 'profile' ? 'bg-black/30 text-white' : 'bg-amber-500/20 text-amber-950 dark:text-amber-300'
+          }`}>
             {studentProfile.dailyStreak}d Streak
           </span>
         </button>
@@ -273,20 +339,34 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
             sound.playMikuJingle();
             setActiveSubTab('quiz-arena');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'quiz-arena'
-              ? isBright
-                ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-sm font-black'
-                : 'bg-gradient-to-r from-amber-500 to-rose-600 text-white shadow-[0_0_15px_rgba(244,63,94,0.35)] font-black'
-              : isBright
-                ? 'text-amber-800 bg-amber-50/70 hover:bg-amber-100 border border-amber-200/80 font-bold'
-                : 'text-amber-300 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-700/40 font-bold'
+              ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-amber-600 dark:hover:text-amber-300'
           }`}
         >
           <Zap className="w-4 h-4 fill-current text-amber-300 animate-bounce" />
           <span>Cadet Quiz Arena</span>
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-black/30 text-white font-bold">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500 text-white font-black">
             15s BLITZ ⚡
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            sound.playBlip(700);
+            setActiveSubTab('forecasting-lab');
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+            activeSubTab === 'forecasting-lab'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
+          }`}
+        >
+          <Zap className="w-4 h-4 text-amber-500" />
+          <span>Weather Forecasting Lab</span>
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-sky-500/20 text-sky-950 dark:text-sky-200 font-black">
+            MAUSAM / IMD
           </span>
         </button>
 
@@ -295,14 +375,10 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
             sound.playBlip(600);
             setActiveSubTab('lectures');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'lectures'
-              ? isBright
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-              : isBright
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-400 hover:bg-slate-800/60'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Video className="w-4 h-4" />
@@ -314,14 +390,10 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
             sound.playBlip(650);
             setActiveSubTab('accreditation');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'accreditation'
-              ? isBright
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-              : isBright
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-400 hover:bg-slate-800/60'
+              ? 'liquid-glass-pill liquid-glass-pill-sky text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Award className="w-4 h-4" />
@@ -333,25 +405,192 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
             sound.playBlip(600);
             setActiveSubTab('requests');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
             activeSubTab === 'requests'
-              ? isBright
-                ? 'bg-amber-600 text-white shadow-sm font-black'
-                : 'bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.25)] font-black'
-              : isBright
-                ? 'text-slate-600 hover:bg-slate-100'
-                : 'text-slate-400 hover:bg-slate-800/60'
+              ? 'liquid-glass-pill liquid-glass-pill-amber text-white shadow-sm'
+              : 'text-slate-950 dark:text-slate-100 hover:text-sky-600 dark:hover:text-sky-300'
           }`}
         >
           <Send className="w-4 h-4" />
           <span>Cadet Clearances to DG ({approvalRequests.filter((r) => r.requesterRole === 'Trainee').length})</span>
           {approvalRequests.filter((r) => r.requesterRole === 'Trainee' && r.status === 'Pending').length > 0 && (
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500 text-slate-950 font-black">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500 text-white font-black">
               {approvalRequests.filter((r) => r.requesterRole === 'Trainee' && r.status === 'Pending').length} Pending
             </span>
           )}
         </button>
       </div>
+
+      {/* SUB-TAB: SIH PROFESSIONAL PROFILE (QUALIFICATIONS, WORK EXP, INTERESTS, SKILLS, CERTIFICATES) */}
+      {activeSubTab === 'sih-profile' && (
+        <TraineeProfessionalProfileView />
+      )}
+
+      {/* SUB-TAB: SIH SUBJECT-WISE MCQ ASSESSMENTS */}
+      {activeSubTab === 'mcq-assessments' && (
+        <div className="space-y-6">
+          <div className={`p-6 rounded-3xl border ${
+            isBright ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-900 border-slate-800'
+          }`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div>
+                <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase bg-sky-100 text-sky-800 border border-sky-300">
+                  SIH Assessment Module
+                </span>
+                <h3 className="text-xl font-black text-slate-900 mt-1">
+                  Subject-Wise MCQ Assessments
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Trainer-designed timed evaluations with instant competency scoring, negative marking rules, and accredited certificates.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  Available Tests: <strong>{questionnaires.length}</strong>
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+              {questionnaires.map((q) => (
+                <div
+                  key={q.id}
+                  className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
+                    isBright
+                      ? 'bg-slate-50/70 border-slate-200 hover:border-sky-300 hover:shadow-md'
+                      : 'bg-slate-900/60 border-slate-800 hover:border-cyan-400'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-800">
+                        {q.subject}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-500 flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-slate-400" />
+                        {q.timeLimitMinutes} min
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-black text-slate-900 leading-snug">
+                      {q.title}
+                    </h4>
+
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                      {q.description}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-200/80 text-[11px]">
+                      <div>
+                        <span className="text-slate-400 block font-mono">Questions</span>
+                        <strong className="text-slate-800">{q.questions.length} Items</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-mono">Pass Mark</span>
+                        <strong className="text-emerald-700">{q.passingMarks}% Required</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-mono">Faculty Lead</span>
+                        <span className="text-slate-700 font-semibold">{q.trainerName}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-mono">Deadline</span>
+                        <span className="text-amber-700 font-bold">{q.deadline}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 pt-3 border-t border-slate-200/60">
+                    <button
+                      onClick={() => {
+                        sound.playBlip(700);
+                        setActiveAssessmentQuestionnaire(q);
+                      }}
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>Attempt Assessment Now</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUB-TAB: SIH COURSE & TRAINING FEEDBACK */}
+      {activeSubTab === 'course-feedback' && (
+        <div className="space-y-6">
+          <div className={`p-6 rounded-3xl border ${
+            isBright ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-900 border-slate-800'
+          }`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+              <div>
+                <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase bg-purple-100 text-purple-800 border border-purple-300">
+                  SIH Trainee Feedback Module
+                </span>
+                <h3 className="text-xl font-black text-slate-900 mt-1">
+                  Course & Training Content Feedback
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Evaluate courses, rate faculty pedagogical effectiveness, and submit recommendations to the Directorate.
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  sound.playBlip(700);
+                  setIsFeedbackOpen(true);
+                }}
+                className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <span>⭐ Submit New Course Review</span>
+              </button>
+            </div>
+
+            {/* Enrolled Courses Available for Feedback */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {courses.slice(0, 3).map((c) => (
+                <div
+                  key={c.id}
+                  className={`p-5 rounded-2xl border ${
+                    isBright ? 'bg-slate-50/70 border-slate-200' : 'bg-slate-900/60 border-slate-800'
+                  } flex flex-col justify-between`}
+                >
+                  <div>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 text-purple-800">
+                      {c.code}
+                    </span>
+                    <h4 className="text-sm font-black text-slate-900 mt-2">
+                      {c.title}
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Faculty: {c.instructor}
+                    </p>
+                    <p className="text-xs text-slate-600 mt-2">
+                      {c.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        setSelectedCourseForFeedback(c.id);
+                        setIsFeedbackOpen(true);
+                      }}
+                      className="w-full py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 font-bold text-xs border border-purple-200 transition-all cursor-pointer"
+                    >
+                      Review Course Content & Trainer
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SUB-TAB 0: STUDENT COMPETENCY PROFILE & STREAKS */}
       {activeSubTab === 'profile' && (
@@ -372,6 +611,17 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
           onAwardXP={onAwardXP}
           onClose={() => setActiveSubTab('profile')}
         />
+      )}
+
+      {/* SUB-TAB: WEATHER FORECASTING TRAINEE LAB (MAUSAM, TEPHIGRAM, SYNOPTIC) */}
+      {activeSubTab === 'forecasting-lab' && (
+        <div className="space-y-6">
+          <WeatherForecastingTraineeSuite
+            onAwardXP={onAwardXP}
+            onOpenRadarSim={onOpenRadarLab}
+            isEmbedded={true}
+          />
+        </div>
       )}
 
       {/* SUB-TAB 1: FREE DEMO VIDEO LECTURES LIBRARY */}
@@ -823,6 +1073,33 @@ export const TraineeDashboard: React.FC<TraineeDashboardProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* SIH Subject-wise MCQ Assessment Modal */}
+      {activeAssessmentQuestionnaire && (
+        <SubjectWiseMcqAssessmentModal
+          questionnaire={activeAssessmentQuestionnaire}
+          onClose={() => setActiveAssessmentQuestionnaire(null)}
+          onComplete={(submission) => {
+            if (onAwardXP && submission.passed) {
+              onAwardXP(submission.score * 2, `Passed ${activeAssessmentQuestionnaire.title}`);
+            }
+          }}
+        />
+      )}
+
+      {/* SIH Course & Content Feedback Modal */}
+      {isFeedbackOpen && (
+        <CourseFeedbackModal
+          courses={courses}
+          defaultCourseId={selectedCourseForFeedback}
+          onClose={() => setIsFeedbackOpen(false)}
+          onSubmitSuccess={() => {
+            if (onAwardXP) {
+              onAwardXP(25, 'Submitted Comprehensive Course Feedback');
+            }
+          }}
+        />
       )}
     </div>
   );

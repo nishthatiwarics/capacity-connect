@@ -2,16 +2,11 @@ import React from 'react';
 import { 
   CloudLightning,
   Search,
-  Flame,
-  Star,
-  Award,
-  ChevronDown,
-  UserCheck,
-  User,
   Lock,
-  ShieldCheck,
   LogOut,
-  MessageSquare
+  MessageSquare,
+  Menu,
+  X
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { sound } from '../utils/audio';
@@ -23,10 +18,12 @@ interface HeaderProps {
   onLogoutToHomepage?: () => void;
   onOpenCrisisDrill: () => void;
   onOpenChat?: () => void;
+  onToggleMobileMenu?: () => void;
   unreadChatCount?: number;
   activeSectionTitle?: string;
   searchQuery?: string;
   onSearchChange?: (q: string) => void;
+  // Kept optional for backward compatibility if passed
   dailyStreak?: number;
   badgesCount?: number;
   currentXP?: number;
@@ -42,143 +39,105 @@ export const Header: React.FC<HeaderProps> = ({
   onLogoutToHomepage,
   onOpenCrisisDrill,
   onOpenChat,
+  onToggleMobileMenu,
   unreadChatCount = 1,
   searchQuery = '',
   onSearchChange,
-  dailyStreak = 12,
-  badgesCount = 8,
-  currentXP = 2340,
-  userLevel = 7,
-  onOpenProfile,
-  onOpenDemoAccounts
 }) => {
-  const roleDisplayMap: Record<UserRole, { name: string; title: string; avatar: string }> = {
-    Admin: {
-      name: 'Dr. M. Mohapatra',
-      title: 'Director General',
-      avatar: ''
-    },
-    Trainer: {
-      name: 'Dr. Someshwar Rao',
-      title: 'Lead Instructor',
-      avatar: ''
-    },
-    Trainee: {
-      name: 'Learner',
-      title: '',
-      avatar: ''
-    },
-    Faculty: {
-      name: 'Prof. S. R. Raman',
-      title: 'Senior Faculty',
-      avatar: ''
-    }
-  };
-
-  const user = roleDisplayMap[currentRole] || roleDisplayMap.Trainee;
-
   return (
-    <header className="sticky top-0 z-40 bg-white/90 border-b border-sky-100/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3 transition-colors shadow-2xs text-slate-800">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-        
-        {/* Search Bar matching screenshot */}
-        <div className="relative w-full md:w-96">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search courses, radar simulations or skills..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-slate-50/80 border border-slate-200 rounded-2xl focus:outline-none focus:border-sky-500 focus:bg-white text-slate-900 placeholder:text-slate-400 transition-all font-medium"
-          />
+    <header className="sticky top-0 z-40 liquid-glass-tray border-b border-white/80 dark:border-white/10 px-3 sm:px-6 lg:px-8 py-3 transition-colors shadow-sm text-slate-800 dark:text-slate-100">
+      {/* MOBILE-ONLY TOP BAR (md:hidden) */}
+      <div className="flex md:hidden items-center justify-between gap-2 pb-2.5 border-b border-white/40 dark:border-white/10 mb-2.5">
+        <div className="flex items-center gap-2">
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            onClick={onToggleMobileMenu}
+            className="p-2 rounded-xl liquid-glass-pill-frosted border border-sky-200/80 text-sky-800 dark:text-sky-200 active:scale-95 transition-all cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center shrink-0"
+            aria-label="Open mobile navigation menu"
+            title="Open navigation menu"
+          >
+            <Menu className="w-5 h-5 text-sky-700 dark:text-sky-300" />
+          </button>
+
+          {/* Mobile App Branding */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-50 to-sky-100 border border-sky-200 flex items-center justify-center shrink-0">
+              <svg viewBox="0 0 100 100" className="w-5 h-5 fill-slate-800" aria-label="Emblem">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#0284c7" strokeWidth="4" />
+                <circle cx="50" cy="50" r="14" fill="none" stroke="#d97706" strokeWidth="3" />
+              </svg>
+            </div>
+            <div>
+              <span className="text-xs font-black text-slate-950 dark:text-white block leading-tight">Capacity Connect</span>
+              <span className="text-[10px] font-black text-slate-950 dark:text-sky-100 block leading-tight">IMD • MoES</span>
+            </div>
+          </div>
         </div>
 
-        {/* Right Stats & Profile Pills */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-end">
-          
-          {/* 1. Streak Pill */}
-          <div 
-            onClick={onOpenProfile}
-            title="Daily Learning Streak"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold cursor-pointer hover:bg-amber-100 transition-all shadow-2xs"
-          >
-            <Flame className="w-4 h-4 fill-amber-500 text-amber-500" />
-            <span>{dailyStreak}-day streak</span>
-          </div>
-
-          {/* 2. Badges Pill */}
-          <div 
-            onClick={onOpenProfile}
-            title="Badges Earned"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-sky-50 border border-sky-200 text-sky-800 text-xs font-bold cursor-pointer hover:bg-sky-100 transition-all shadow-2xs"
-          >
-            <Star className="w-3.5 h-3.5 fill-sky-500 text-sky-500" />
-            <span>{badgesCount} badges</span>
-          </div>
-
-          {/* 3. Level & XP Progress Pill */}
-          <div 
-            onClick={onOpenProfile}
-            title="Learner Level & XP Progress"
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-100 transition-all shadow-2xs"
-          >
-            <span className="font-extrabold text-slate-800">Level {userLevel}</span>
-            <div className="w-16 bg-slate-200 rounded-full h-2 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-sky-500 to-blue-600 h-full rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, Math.round((currentXP % 1000) / 10))}%` }}
-              />
-            </div>
-            <span className="text-[11px] text-slate-500 font-mono font-bold">
-              {currentXP.toLocaleString()}/3k XP
-            </span>
-          </div>
-
-          {/* 4. User Profile Pill */}
-          <div 
-            onClick={onOpenProfile}
-            className="flex items-center gap-2 px-2.5 py-1 rounded-2xl border border-slate-200 hover:border-sky-300 bg-white cursor-pointer shadow-2xs transition-all text-slate-800"
-          >
-            {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-7 h-7 rounded-full object-cover border border-sky-200"
-              />
-            ) : (
-              <div className="w-7 h-7 rounded-full bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-700">
-                <User className="w-3.5 h-3.5" />
-              </div>
-            )}
-            <div className="text-left hidden lg:block">
-              <div className="text-xs font-bold text-slate-900 leading-tight">
-                {user.name}
-              </div>
-              {user.title && user.title !== user.name ? (
-                <div className="text-[10px] text-slate-500 font-medium">
-                  {user.title}
-                </div>
-              ) : null}
-            </div>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-          </div>
-
-          {/* 5. Faculty Chat & Feedback Trigger Pill */}
+        {/* Right Quick Mobile Icons */}
+        <div className="flex items-center gap-2">
+          {/* Chat Icon */}
           <button 
             type="button"
             onClick={onOpenChat}
-            title="Open Trainee-Trainer Chat & Anonymous Lounge (Alt+C)"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 text-xs font-bold cursor-pointer transition-all shadow-2xs active:scale-95"
+            className="relative p-2 rounded-xl liquid-glass-pill-frosted border border-indigo-200/80 text-indigo-700 dark:text-indigo-300 min-w-[38px] min-h-[38px] flex items-center justify-center active:scale-95 cursor-pointer"
+            title="Faculty Chat"
           >
-            <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
-            <span className="hidden sm:inline">Chat & Feedback</span>
+            <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             {unreadChatCount > 0 && (
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
             )}
           </button>
 
-          {/* Quick Role / Cockpit Switcher Dropdown */}
-          <div className="flex items-center p-0.5 border border-slate-200 rounded-xl text-[11px] font-bold bg-slate-100">
+          {/* Drill Shortcut */}
+          <button
+            onClick={() => {
+              sound.playAlert();
+              onOpenCrisisDrill();
+            }}
+            className="p-2 rounded-xl liquid-glass-pill liquid-glass-pill-amber text-white min-w-[38px] min-h-[38px] flex items-center justify-center active:scale-95 shadow-xs cursor-pointer"
+            title="Emergency Radar Crisis Drill"
+          >
+            <CloudLightning className="w-4 h-4 fill-white text-white" />
+          </button>
+        </div>
+      </div>
+
+      {/* MAIN HEADER ROW: Expanded Search Bar & Clean, Reduced Button Cluster */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
+        
+        {/* BIGGER, EXPANSIVE & PROMINENT SEARCH BAR */}
+        <div className="relative flex-1 max-w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl">
+          <Search className="w-5 h-5 absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 text-sky-600 pointer-events-none transition-colors" />
+          <input
+            type="text"
+            placeholder="Search courses, Doppler radar simulations, forecasting skills, or SOPs..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            className="w-full pl-11 sm:pl-12 pr-12 sm:pr-20 py-2.5 sm:py-3 text-sm sm:text-base liquid-glass-input rounded-2xl focus:outline-none text-slate-900 dark:text-white placeholder:text-slate-400 transition-all font-medium min-h-[46px] sm:min-h-[50px]"
+          />
+          {searchQuery ? (
+            <button
+              type="button"
+              onClick={() => onSearchChange?.('')}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-all cursor-pointer"
+              title="Clear search"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          ) : (
+            <div className="hidden sm:flex items-center gap-1 absolute right-3.5 top-1/2 -translate-y-1/2 px-2 py-1 bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/10 rounded-md text-[11px] font-mono font-bold text-slate-400 shadow-2xs pointer-events-none">
+              <span>⌘K</span>
+            </div>
+          )}
+        </div>
+
+        {/* CLEAN, MINIMAL & VISIBLE ACTION BUTTONS (LESS IS MORE) */}
+        <div className="flex items-center gap-2 sm:gap-2.5 justify-end shrink-0">
+          
+          {/* 1. Cockpit Role Switcher (Streamlined & Intuitive) */}
+          <div className="flex items-center p-1 border border-white/60 dark:border-white/15 rounded-2xl text-xs font-bold liquid-glass-pill-frosted shadow-xs shrink-0 gap-1">
             {(['Trainee', 'Trainer', 'Admin'] as const).map((r) => {
               const isCurrent = currentRole === r;
               const isRestricted = 
@@ -204,54 +163,69 @@ export const Header: React.FC<HeaderProps> = ({
                       ? `Active: ${r}`
                       : isRestricted
                         ? r === 'Admin'
-                          ? 'Restricted: Learners cannot access Admin Dashboard without DG Clearance'
-                          : 'Restricted: Only Admin can access trainer/trainee consoles'
-                        : `Switch to ${r}`
+                          ? 'Restricted: Request DG Clearance'
+                          : 'Restricted: Trainer clearance required'
+                        : `Switch to ${r} Cockpit`
                   }
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                  className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 min-h-[36px] ${
                     isCurrent
                       ? currentRole === 'Admin'
-                        ? 'bg-amber-500 text-white font-extrabold shadow-2xs'
-                        : 'bg-white text-slate-900 font-extrabold shadow-2xs'
+                        ? 'liquid-glass-pill liquid-glass-pill-amber text-white font-black shadow-xs'
+                        : 'liquid-glass-pill liquid-glass-pill-sky text-white font-black shadow-xs'
                       : isRestricted
-                        ? 'text-slate-400 hover:text-amber-600'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'text-slate-400 dark:text-slate-500 hover:text-amber-700'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
                   }`}
                 >
-                  {isRestricted && <Lock className="w-2.5 h-2.5 opacity-70" />}
+                  {isRestricted && <Lock className="w-3 h-3 opacity-60" />}
                   <span>{r}</span>
                   {currentRole === 'Admin' && isCurrent && (
-                    <span className="text-[9px] font-mono text-white font-bold">★</span>
+                    <span className="text-[10px] text-white">★</span>
                   )}
                 </button>
               );
             })}
           </div>
 
-          {/* Drill Shortcut */}
+          {/* 2. Faculty Chat Button */}
+          <button 
+            type="button"
+            onClick={onOpenChat}
+            title="Open Faculty Chat & Anonymous Feedback Lounge"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl liquid-glass-pill liquid-glass-pill-indigo text-white text-xs font-extrabold transition-all shadow-xs cursor-pointer active:scale-95 shrink-0 min-h-[38px]"
+          >
+            <MessageSquare className="w-4 h-4 text-white" />
+            <span className="hidden lg:inline whitespace-nowrap">Faculty Chat</span>
+            {unreadChatCount > 0 && (
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            )}
+          </button>
+
+          {/* 3. Emergency Crisis Drill Button */}
           <button
             onClick={() => {
               sound.playAlert();
               onOpenCrisisDrill();
             }}
-            className="p-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-400 hover:to-red-400 text-white font-bold shadow-2xs transition-all active:scale-95 cursor-pointer shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl liquid-glass-pill liquid-glass-pill-amber text-white text-xs font-extrabold shadow-xs transition-all active:scale-95 cursor-pointer shrink-0 min-h-[38px]"
             title="Launch Emergency Radar Crisis Drill"
           >
             <CloudLightning className="w-4 h-4 fill-white text-white" />
+            <span className="hidden xl:inline whitespace-nowrap">Crisis Drill</span>
           </button>
 
-          {/* Logout / Return to Homepage */}
+          {/* 4. Exit / Return to Institutional Homepage */}
           {onLogoutToHomepage && (
             <button
               onClick={() => {
                 sound.playBlip(500);
                 onLogoutToHomepage();
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold shadow-2xs transition-all active:scale-95 cursor-pointer shrink-0"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl liquid-glass-pill liquid-glass-pill-frosted hover:border-rose-400 text-rose-700 dark:text-rose-400 text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer shrink-0 min-h-[38px]"
               title="Sign Out & Return to Institutional Homepage"
             >
-              <LogOut className="w-3.5 h-3.5 text-rose-600" />
-              <span className="hidden sm:inline">Homepage</span>
+              <LogOut className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+              <span className="hidden sm:inline whitespace-nowrap">Exit</span>
             </button>
           )}
         </div>

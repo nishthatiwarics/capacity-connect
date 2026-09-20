@@ -244,10 +244,7 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Top Banner Quote Card (Prompt request: add the quote at the top!) */}
-      <OceanQuoteCard variant="banner" />
-
-      {/* Main Grid: 2 Columns matching screenshot */}
+      {/* Main Grid: 2 Balanced Columns */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         
         {/* =========================================================================
@@ -255,10 +252,10 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
         ========================================================================= */}
         <div className="xl:col-span-8 space-y-6">
 
-          {/* Ocean Hero Banner matching reference image */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#0ea5e9] text-white p-6 sm:p-8 lg:p-10 shadow-lg border border-sky-400/40">
+          {/* Ocean Hero Banner - Clean, Modern & Atmospheric */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0369a1] via-[#0284c7] to-[#0ea5e9] text-white p-6 sm:p-8 shadow-sm border border-sky-400/30">
             {/* Background image overlay */}
-            <div className="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none">
+            <div className="absolute inset-0 opacity-20 mix-blend-screen pointer-events-none">
               <img 
                 src={oceanHeroBanner} 
                 alt="MoES Ocean Science Banner" 
@@ -266,11 +263,11 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
               />
             </div>
             {/* Gradient wash overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1]/95 via-[#0284c7]/75 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1]/90 via-[#0284c7]/70 to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl">
               {/* Category eyebrow */}
-              <div className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase font-bold text-sky-200 mb-3 bg-white/15 px-3 py-1 rounded-full border border-white/25 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase font-bold text-sky-200 mb-2.5 bg-white/15 px-3 py-0.5 rounded-full border border-white/20 backdrop-blur-sm">
                 <span>LEARN</span>
                 <span>•</span>
                 <span>CONTRIBUTE</span>
@@ -278,25 +275,24 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                 <span>PROTECT</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight font-sans drop-shadow-sm">
-                Build a Safer,<br />
-                <span className="text-sky-200">Brighter Tomorrow</span>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight font-sans">
+                Build a Safer, <span className="text-sky-200">Brighter Tomorrow</span>
               </h1>
 
-              <p className="mt-3 text-sm sm:text-base text-sky-100 leading-relaxed max-w-lg font-normal">
-                Gain skills. Earn recognition. Be part of a resilient India through ocean, atmosphere and earth system science.
+              <p className="mt-2.5 text-xs sm:text-sm text-sky-100 leading-relaxed max-w-lg font-normal">
+                Gain meteorology and ocean science competencies. Level up your cadet rank and contribute to national weather resilience.
               </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => {
                     sound.playSuccess();
                     onStartCourse?.('ocean-sys-101');
                   }}
-                  className="px-6 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer"
                 >
                   <span>Continue Learning</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
                 <button
@@ -304,86 +300,71 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                     sound.playBlip(700);
                     onOpenSkillTree?.();
                   }}
-                  className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold text-sm backdrop-blur-md transition-all active:scale-95 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-semibold text-xs backdrop-blur-md transition-all active:scale-95 cursor-pointer"
                 >
                   Explore Skill Tree
                 </button>
               </div>
             </div>
-
-            {/* Right side floating slogan badge */}
-            <div className="hidden md:flex absolute right-6 bottom-6 flex-col items-end text-right">
-              <span className="text-xs font-serif italic text-amber-200 drop-shadow-sm">
-                Healthy Oceans
-              </span>
-              <span className="text-xs font-serif italic text-sky-100 drop-shadow-sm">
-                Resilient Coasts
-              </span>
-              <span className="text-sm font-serif italic font-bold text-white drop-shadow-md">
-                Stronger India
-              </span>
-            </div>
           </div>
 
-          {/* 4 Metrics Stats Row matching screenshot */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {/* 4 Metrics Stats Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
             
             {/* Card 1: Level */}
             <div 
               onClick={onOpenProfile}
-              className="p-4 rounded-2xl bg-white/95 border border-sky-100 hover:border-sky-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group text-slate-900"
+              className="p-4 rounded-2xl bg-white/95 border border-slate-200/80 hover:border-sky-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group text-slate-900"
             >
               <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm group-hover:scale-105 transition-transform">
-                  <Waves className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-sm group-hover:scale-105 transition-transform">
+                  <Waves className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-bold text-sky-700 uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">Level 7</span>
               </div>
-              <div className="font-extrabold text-base text-slate-900">Level 7 Cadet</div>
-              <div className="text-xs text-slate-500 font-medium">660 XP to Level 8</div>
+              <div className="font-extrabold text-sm text-slate-900">Level 7 Cadet</div>
+              <div className="text-[11px] text-slate-500 font-medium">660 XP to Level 8</div>
               {/* Progress bar */}
-              <div className="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div className="mt-2 w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                 <div className="bg-gradient-to-r from-sky-500 to-blue-600 h-full rounded-full transition-all duration-500" style={{ width: '78%' }} />
               </div>
-              <div className="mt-1 text-[11px] text-slate-500 font-mono font-semibold text-right">2,340 / 3,000 XP</div>
+              <div className="mt-1 text-[10px] text-slate-400 font-mono font-semibold text-right">2,340 / 3,000 XP</div>
             </div>
 
             {/* Card 2: Streak */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-amber-100 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
+            <div className="p-4 rounded-2xl bg-white/95 border border-slate-200/80 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
-                  <Flame className="w-5 h-5 fill-amber-500 text-amber-500" />
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <Flame className="w-4 h-4 fill-amber-500 text-amber-500" />
                 </div>
                 <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Active</span>
               </div>
-              <div className="font-extrabold text-base text-slate-900">{dailyStreak} Day Streak</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Keep it up! ☀️ High Momentum</div>
+              <div className="font-extrabold text-sm text-slate-900">{dailyStreak} Day Streak</div>
+              <div className="text-[11px] text-slate-500 font-medium mt-1">Daily consistency</div>
             </div>
 
             {/* Card 3: Badges */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-blue-100 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
+            <div className="p-4 rounded-2xl bg-white/95 border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                  <Award className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                  <Award className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Earned</span>
               </div>
-              <div className="font-extrabold text-base text-slate-900">{badgesCount} Badges Earned</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">3 new this month</div>
+              <div className="font-extrabold text-sm text-slate-900">{badgesCount} Badges</div>
+              <div className="text-[11px] text-slate-500 font-medium mt-1">3 new this month</div>
             </div>
 
             {/* Card 4: Global Rank */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-emerald-100 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
+            <div className="p-4 rounded-2xl bg-white/95 border border-slate-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all text-slate-900">
               <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4" />
                 </div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Ranked</span>
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Top 15%</span>
               </div>
-              <div className="font-extrabold text-base text-slate-900">Top 15%</div>
-              <div className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
-                <span>↑ 12 places this week</span>
-              </div>
+              <div className="font-extrabold text-sm text-slate-900">Ranked Top 15%</div>
+              <div className="text-[11px] text-emerald-600 font-medium mt-1">↑ 12 places this week</div>
             </div>
           </div>
 
@@ -658,20 +639,6 @@ export const OceanCapacityDashboard: React.FC<OceanCapacityDashboardProps> = ({
                   </span>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* 4. MoES Ocean Science Slogan Art Card */}
-          <div className="rounded-2xl bg-gradient-to-br from-sky-50 via-white to-blue-50/70 border border-sky-200/80 p-4 text-center relative overflow-hidden shadow-2xs text-slate-800">
-            <div className="text-xs font-serif italic text-slate-800 font-bold leading-relaxed">
-              "Vigyan se Surakshit Samudra,<br />Samruddh Bharat"
-            </div>
-            <div className="text-[10px] uppercase font-mono tracking-wider text-sky-800 font-bold mt-1">
-              Ministry of Earth Sciences • Government of India
-            </div>
-            {/* Visual ocean wave icon */}
-            <div className="mt-2 flex justify-center text-sky-500">
-              <Waves className="w-8 h-4" />
             </div>
           </div>
 

@@ -350,6 +350,156 @@ export interface QuizFeedback {
   trainerRespondedAt?: string;
 }
 
+export interface TraineeQualification {
+  id: string;
+  degree: string;
+  institution: string;
+  year: string;
+  specialization: string;
+  grade?: string;
+}
+
+export interface TraineeWorkExperience {
+  id: string;
+  role: string;
+  organization: string;
+  period: string;
+  keyResponsibilities: string;
+}
+
+export interface TraineeSkill {
+  name: string;
+  level: number; // 0 - 100
+  category: 'Meteorology' | 'Computing & NWP' | 'Instruments & Radar' | 'Advisories';
+}
+
+export interface TraineeCertificate {
+  id: string;
+  title: string;
+  issuer: string;
+  issueDate: string;
+  credentialCode: string;
+  verified: boolean;
+}
+
+export interface UserAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  avatar: string;
+  designation: string;
+  organization: string;
+  station: string;
+  status: 'Active' | 'Pending Approval' | 'Suspended';
+  createdAt: string;
+  qualification?: string;
+  specialization?: string;
+}
+
+export interface TrainerQuestionnaireQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  marks: number;
+}
+
+export interface TrainerQuestionnaire {
+  id: string;
+  title: string;
+  subject: string;
+  deadline: string;
+  totalMarks: number;
+  passingMarks: number;
+  createdBy: string;
+  trainerId: string;
+  status: 'Active' | 'Closed';
+  questions: TrainerQuestionnaireQuestion[];
+  submissionsCount: number;
+  averageScore: number;
+  createdAt: string;
+}
+
+export interface TraineeQuestionnaireSubmission {
+  id: string;
+  questionnaireId: string;
+  questionnaireTitle: string;
+  traineeId: string;
+  traineeName: string;
+  submittedAt: string;
+  score: number;
+  totalMarks: number;
+  percentage: number;
+  passed: boolean;
+  answers: number[];
+  feedback?: string;
+}
+
+export interface CourseFeedbackSubmission {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  traineeName: string;
+  traineeStation: string;
+  overallRating: number; // 1 to 5
+  contentQuality: number;
+  trainerEffectiveness: number;
+  feedbackText: string;
+  suggestions: string;
+  submittedAt: string;
+  isAnonymous?: boolean;
+}
+
+export interface AdminAnnouncement {
+  id: string;
+  title: string;
+  category: 'Notification' | 'Announcement' | 'Achievement' | 'New Learning Content';
+  content: string;
+  author: string;
+  publishedAt: string;
+  isPinned: boolean;
+  targetRoles: ('Trainee' | 'Trainer' | 'Admin')[];
+  badgeText?: string;
+  linkText?: string;
+  priority?: 'Normal' | 'Urgent';
+  publishedBy?: string;
+  actionUrl?: string;
+}
+
+export interface AdminMonitoringStats {
+  totalCourses: number;
+  totalEnrollments: number;
+  certificationsIssued: number;
+  assessmentsCompleted: number;
+  assessmentPassRate: number;
+  dailyActiveLearnerHours: number;
+  stationEnrollmentBreakdown: { station: string; activeTrainees: number; completionRate: number }[];
+  subjectPassRateBreakdown: { subject: string; enrolled: number; passRate: number }[];
+}
+
+export interface TrainerCompetencySubjectMapping {
+  id: string;
+  subjectName: string;
+  domain: string;
+  requiredQualification: string;
+  minExperienceYears: number;
+  urgency: 'Standard' | 'High Demand' | 'Critical National Priority';
+  suitableTrainers: {
+    trainerId: string;
+    trainerName: string;
+    avatar: string;
+    institution: string;
+    matchScore: number; // 0 - 100%
+    experienceYears: number;
+    highestDegree: string;
+    specialization: string;
+    currentAssignment?: string;
+    availability: 'Available for Assignment' | 'Currently Assigned' | 'Guest Faculty';
+  }[];
+}
+
 export interface LectureFeedback {
   id: string;
   lectureId: string;

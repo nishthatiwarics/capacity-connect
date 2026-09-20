@@ -42,7 +42,10 @@ import {
   Clock,
   Send,
   LogOut,
-  MessageSquare
+  MessageSquare,
+  Home,
+  Menu,
+  User
 } from 'lucide-react';
 import { PortalHomepage } from './components/PortalHomepage';
 import { 
@@ -104,6 +107,9 @@ import { sound } from './utils/audio';
 import { useTheme } from './context/ThemeContext';
 import { AdminClearanceModal } from './components/AdminClearanceModal';
 import { ChatSystemWindow } from './components/ChatSystemWindow';
+import { WeatherBulletinDashboard } from './components/WeatherBulletinDashboard';
+import { WeatherForecastingTraineeSuite } from './components/WeatherForecastingTraineeSuite';
+import { ToolsOperationsModal } from './components/ToolsOperationsModal';
 import confetti from 'canvas-confetti';
 
 export default function App() {
@@ -136,15 +142,17 @@ export default function App() {
 
   // Sidebar navigation state aligned with screenshot (Home, Skill Tree, Courses, Quests, Leaderboard, Badges, Profile)
   const [activeNav, setActiveNav] = useState<NavSection>('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Navigation tab aligned with 3 Pillars & Portal Architecture
   const [activeTab, setActiveTab] = useState<'dashboard' | 'training' | 'competency' | 'knowledge' | 'my-learning'>('dashboard');
   
   // Pillar Sub-tabs for deep organized navigation
   const [trainingSubTab, setTrainingSubTab] = useState<'courses' | 'masterclasses' | 'roster'>('courses');
-  const [competencySubTab, setCompetencySubTab] = useState<'matrix' | 'simulator' | 'arena'>('matrix');
+  const [competencySubTab, setCompetencySubTab] = useState<'matrix' | 'simulator' | 'arena' | 'forecasting-lab'>('matrix');
   const [knowledgeSubTab, setKnowledgeSubTab] = useState<'hub' | 'faculty'>('hub');
-  const [dashboardView, setDashboardView] = useState<'ocean' | 'cockpit' | 'command-network' | 'telemetry'>('ocean');
+  const [dashboardView, setDashboardView] = useState<'ocean' | 'cockpit' | 'command-network' | 'telemetry' | 'bulletin'>('ocean');
+  const [isToolsModalOpen, setIsToolsModalOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -493,29 +501,44 @@ export default function App() {
   }
 
   return (
-    <div className="bg-pink-blue-mesh min-h-screen flex flex-row font-sans relative text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden">
-      {/* Ambient Atmospheric Vibrant Gradient Floating Glows */}
+    <div className={`min-h-screen flex flex-row font-sans relative text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden liquid-glass-canvas ${isBright ? '' : 'dark'}`}>
+      {/* Liquid Glass Aesthetic Atmosphere with Multi-Chromatic Prismatic Light Blooms (matching Liquid Glass Kit & Solutions Digitales) */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[-5%] w-[620px] h-[620px] bg-gradient-to-br from-cyan-400/40 via-sky-500/30 to-blue-600/25 rounded-full blur-[100px] animate-float-slow" />
-        <div className="absolute top-[18%] right-[-10%] w-[680px] h-[680px] bg-gradient-to-bl from-rose-400/35 via-pink-400/30 to-amber-300/35 rounded-full blur-[110px] animate-float-reverse" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[720px] h-[720px] bg-gradient-to-tr from-purple-500/30 via-indigo-400/25 to-cyan-400/25 rounded-full blur-[120px]" />
-        <div className="absolute top-[50%] left-[-5%] w-[500px] h-[500px] bg-gradient-to-r from-emerald-400/30 via-teal-400/25 to-sky-400/20 rounded-full blur-[90px] animate-pulse-glow" />
-        <div className="absolute bottom-[15%] right-[-5%] w-[550px] h-[550px] bg-gradient-to-tl from-amber-400/30 via-orange-300/25 to-rose-400/25 rounded-full blur-[100px]" />
+        {/* Directional Soft Ambient Rim Light */}
+        <div className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-gradient-to-br from-white/90 via-sky-200/40 to-transparent rounded-full blur-[80px]" />
+        
+        {/* Multi-chromatic pastel dispersion orbs floating beneath the frosted glass blocks */}
+        <div className="absolute top-12 right-10 w-[550px] h-[550px] bg-gradient-to-bl from-pink-300/35 via-purple-300/25 to-sky-300/30 rounded-full blur-[110px] animate-pulse" style={{ animationDuration: '9s' }} />
+        <div className="absolute top-1/3 -left-28 w-[620px] h-[620px] bg-gradient-to-tr from-cyan-300/35 via-sky-200/30 to-blue-300/20 rounded-full blur-[120px]" />
+        <div className="absolute top-2/3 right-1/4 w-[520px] h-[520px] bg-gradient-to-tl from-amber-200/35 via-rose-200/25 to-violet-300/25 rounded-full blur-[130px]" />
+        <div className="absolute -bottom-20 left-1/3 w-[580px] h-[580px] bg-gradient-to-tr from-emerald-200/30 via-teal-200/25 to-cyan-300/20 rounded-full blur-[110px]" />
+        
+        {/* Subtle prismatic sheen overlay */}
+        <div className="absolute inset-0 weather-pixel-overlay opacity-10 pointer-events-none" />
       </div>
 
       {/* Navigation Sidebar matching screenshot */}
       <Sidebar
         activeNav={activeNav}
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
         onSelectNav={(nav) => {
+          setIsMobileMenuOpen(false);
           setActiveNav(nav);
-          if (nav === 'home' || nav === 'dashboard') {
+          if (nav === 'home' || nav === 'dashboard' || nav === 'learner-dashboard') {
             setActiveTab('dashboard');
             setDashboardView('ocean');
+          } else if (nav === 'weather-bulletin') {
+            setActiveTab('dashboard');
+            setDashboardView('bulletin');
           } else if (nav === 'skill-tree') {
             setIsCompetencyMatrixOpen(true);
           } else if (nav === 'courses') {
             setActiveTab('training');
             setTrainingSubTab('courses');
+          } else if (nav === 'trainer-matching') {
+            setActiveTab('competency');
+            setCompetencySubTab('matrix');
           } else if (nav === 'quests') {
             setActiveTab('competency');
             setCompetencySubTab('arena');
@@ -546,19 +569,31 @@ export default function App() {
           setIsChatOpen(true);
         }}
         onLogoutToHomepage={handleLogoutToHomepage}
+        currentRole={currentRole}
+        studentName={studentProfile.name}
+        studentStation={studentProfile.station}
+        dailyStreak={studentProfile.dailyStreak}
+        badgesCount={studentProfile.badges?.length || 8}
+        currentXP={currentXP}
+        userLevel={currentTierConfig.levelNumber || 7}
+        animalRank={studentProfile.currentAnimalRank}
+        animalEmoji={currentTierConfig.animalEmoji}
+        onOpenProfile={() => setIsStudentProfileModalOpen(true)}
       />
 
       {/* Main Content Column */}
       <div className="flex-1 flex flex-col min-w-0 relative z-10">
-        {/* Top Command Header matching screenshot */}
+        {/* Top Command Header with expanded search bar & clean actions */}
         <Header
           currentRole={currentRole}
           onRoleChange={handleSwitchRole}
           onRequestAdminClearance={handleRequestAdminClearance}
           onLogoutToHomepage={handleLogoutToHomepage}
           onOpenCrisisDrill={() => setIsCrisisDrillOpen(true)}
+          onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
           activeSectionTitle={
             activeNav === 'home' || activeNav === 'dashboard' ? 'Home' :
+            activeNav === 'weather-bulletin' ? 'Weather Bulletin' :
             activeNav === 'skill-tree' ? 'Skill Tree' :
             activeNav === 'courses' ? 'Courses' :
             activeNav === 'quests' ? 'Quests' :
@@ -580,138 +615,52 @@ export default function App() {
           }}
         />
 
-        {/* Quick-Access Ribbon with Clean Meteorological Light Aesthetic */}
-        <div className="border-b border-sky-100/90 px-6 py-2.5 bg-white/80 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
+        {/* Quick-Access Sub-Bar - Clean, Uncluttered & Essential */}
+        <div className="border-b border-sky-100 px-4 sm:px-6 py-2.5 bg-white/90 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
           <div className="flex items-center gap-2.5">
-            <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-500">
-              Active Cockpit:
+            <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-400">
+              Active Console:
             </span>
-            <span className="px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 bg-sky-50 text-sky-800 border border-sky-200 shadow-2xs">
-              {currentRole === 'Admin' ? '🔒 Admin HQ (Dr. M. Mohapatra • DG)' : currentRole === 'Trainer' ? '📋 Faculty Console (Dr. Someshwar Rao)' : '👤 Trainee Flight Deck (Julianne Moore)'}
+            <span className="px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-2 bg-sky-50 text-sky-800 border border-sky-200 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              {currentRole === 'Admin' ? 'Admin HQ (Dr. M. Mohapatra • DG)' : currentRole === 'Trainer' ? 'Faculty Console (Dr. Someshwar Rao)' : 'Trainee Flight Deck (Julianne Moore)'}
             </span>
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* Trainer Publishing Actions (Only appears for Trainers) */}
-            {currentRole === 'Trainer' && (
-              <div className="flex items-center gap-2 pr-2 border-r border-sky-200">
-                <span className="text-[10px] font-mono font-bold uppercase text-slate-500 hidden lg:inline">
-                  Trainer Studio:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.playBlip(700);
-                    setIsUploadLectureOpen(true);
-                  }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-2xs cursor-pointer active:scale-95 transition-all"
-                  title="Upload a new free demo video lecture for trainees (Trainer Only)"
-                >
-                  <Video className="w-3.5 h-3.5" />
-                  <span>+ Upload Lecture</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.playBlip(700);
-                    setActiveTab('knowledge');
-                    setKnowledgeSubTab('hub');
-                    setIsUploadStudyMaterialOpen(true);
-                  }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-purple-600 hover:bg-purple-500 text-white shadow-2xs cursor-pointer active:scale-95 transition-all"
-                  title="Upload SOP, calibration manual, or study notes (Trainer Only)"
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>+ Upload Study Material</span>
-                </button>
-              </div>
-            )}
-
-            {/* Faculty & Trainee Chat Window Trigger */}
-            <button
-              onClick={() => {
-                sound.playBlip(750);
-                setIsChatOpen(true);
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-900 transition-all shadow-2xs cursor-pointer active:scale-95"
-              title="Open Chat with Faculty, Anonymous Lounge & Feedback"
-            >
-              <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Faculty Chat & Feedback</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            </button>
-            {/* Homepage / Sign Out button */}
-            <button
-              onClick={handleLogoutToHomepage}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 transition-all shadow-2xs cursor-pointer"
-              title="Return to the separate login homepage"
-            >
-              <LogOut className="w-3.5 h-3.5 text-rose-600" />
-              <span>Institutional Homepage</span>
-            </button>
-
-            {/* Export Capacity CSV */}
-            <button
-              onClick={handleExportReport}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-all shadow-2xs cursor-pointer"
-              title="Export Workforce Capacity CSV Report"
-            >
-              <Download className="w-3.5 h-3.5 text-sky-600" />
-              <span>Export CSV</span>
-            </button>
-
-            {/* Forecaster Competency Rank Badge */}
+            {/* Live Weather Forecastation Bulletin Quick Access */}
             <button
               onClick={() => {
                 sound.playBlip(700);
-                setActiveNav('trainees');
-                setActiveTab('my-learning');
+                setActiveNav('weather-bulletin');
+                setActiveTab('dashboard');
+                setDashboardView('bulletin');
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 transition-all shadow-2xs cursor-pointer"
-              title="View your personalized Individual Development Plan & Rank"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer active:scale-95 ${
+                dashboardView === 'bulletin'
+                  ? 'bg-sky-600 text-white font-extrabold'
+                  : 'border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-800'
+              }`}
+              title="View Live National Weather Forecastation Bulletin"
             >
-              <span>{currentTierConfig.animalEmoji}</span>
-              <span className="font-extrabold text-amber-700">{studentProfile.currentAnimalRank}</span>
-              <span className="hidden sm:inline font-mono text-slate-500 text-[11px]">
-                (L{currentTierConfig.levelNumber} • {studentProfile.dailyStreak}d streak)
+              <span>🌤️ Weather Bulletin</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-emerald-500 text-white font-mono font-bold">
+                LIVE
               </span>
             </button>
 
-            {/* Competency Gap Analysis Shortcut */}
+            {/* Operations & Tools Hub (Unifies CSV, Skills Matrix, Demo Persona Switcher, Reports) */}
             <button
-              onClick={() => setIsCompetencyMatrixOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-all shadow-2xs cursor-pointer"
+              onClick={() => {
+                sound.playBlip(700);
+                setIsToolsModalOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-all shadow-2xs cursor-pointer active:scale-95"
+              title="Open Operations & Tools Hub"
             >
-              <Target className="w-3.5 h-3.5 text-sky-600" />
-              <span>Skills Matrix</span>
+              <Layers className="w-3.5 h-3.5 text-sky-600" />
+              <span>Tools & Reports</span>
             </button>
-
-            {/* Demo Accounts Switcher Trigger */}
-            <button
-              onClick={() => setIsDemoAccountModalOpen(!isDemoAccountModalOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-all shadow-2xs cursor-pointer"
-            >
-              <UserCheck className="w-3.5 h-3.5 text-sky-600" />
-              <span>Demo Accounts</span>
-              <ChevronDown className="w-3 h-3" />
-            </button>
-
-            {/* Upload Demo Lecture (Restricted strictly to Trainers) */}
-            {currentRole === 'Trainer' && (
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playBlip(700);
-                  setIsUploadLectureOpen(true);
-                }}
-                className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white transition-all shadow-2xs cursor-pointer active:scale-95"
-                title="Upload a new video masterclass with chapters and lecture notes (Trainer Only)"
-              >
-                <Video className="w-3.5 h-3.5" />
-                <span>+ Upload Lecture</span>
-              </button>
-            )}
           </div>
         </div>
 
@@ -734,7 +683,7 @@ export default function App() {
         )}
 
         {/* Main Content Container */}
-        <main className="flex-1 p-6 lg:p-8 max-w-[1600px] w-full mx-auto space-y-6">
+        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto space-y-6 pb-28 md:pb-8">
           {/* Dynamic Role-Based Institutional Directive Banner */}
           {currentRole === 'Admin' && (
             <div className="p-5 sm:p-6 rounded-3xl border bg-gradient-to-r from-amber-50 via-white to-sky-50 border-amber-200 text-slate-800 shadow-2xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -804,6 +753,7 @@ export default function App() {
                   onClick={() => {
                     setActiveTab('dashboard');
                     setDashboardView('cockpit');
+                    setAdminInspectionMode('admin');
                   }}
                   className="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs shadow-2xs transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
@@ -975,22 +925,22 @@ export default function App() {
           ========================================================================= */}
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
-              {/* Dashboard Sub-View Mode Selector */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-white/80 backdrop-blur-md p-2 rounded-2xl border border-slate-200/80 shadow-2xs">
-                <div className="flex flex-wrap items-center gap-1.5">
+              {/* Dashboard Sub-View Mode Selector - Clean & Unified */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/80 shadow-2xs">
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar p-0.5">
                   <button
                     onClick={() => {
                       sound.playBlip(700);
                       setDashboardView('ocean');
                     }}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       dashboardView === 'ocean'
-                        ? 'bg-[#ea580c] text-white shadow-xs'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                     }`}
                   >
                     <span>🌊</span>
-                    <span>Ocean Capacity Hub (Overview)</span>
+                    <span>Overview</span>
                   </button>
 
                   <button
@@ -998,14 +948,14 @@ export default function App() {
                       sound.playBlip(700);
                       setDashboardView('telemetry');
                     }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       dashboardView === 'telemetry'
                         ? 'bg-slate-900 text-white shadow-xs'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                     }`}
                   >
                     <span>📊</span>
-                    <span>Network Telemetry & DWR Stations</span>
+                    <span>Telemetry & DWR</span>
                   </button>
 
                   <button
@@ -1013,20 +963,16 @@ export default function App() {
                       sound.playBlip(700);
                       setDashboardView('cockpit');
                     }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       dashboardView === 'cockpit'
-                        ? currentRole === 'Admin'
-                          ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-                          : currentRole === 'Trainer'
-                            ? 'bg-emerald-600 text-white font-bold shadow-xs'
-                            : 'bg-indigo-600 text-white font-bold shadow-xs'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                     }`}
                   >
                     <span>{currentRole === 'Admin' ? '🏛️' : currentRole === 'Trainer' ? '🎓' : '🚀'}</span>
                     <span>{currentRole} Cockpit</span>
                     {currentRole === 'Admin' && pendingApprovalsCount > 0 && (
-                      <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-950 text-amber-300 font-mono font-bold animate-pulse">
+                      <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-amber-400 text-slate-950 font-mono font-bold">
                         {pendingApprovalsCount}
                       </span>
                     )}
@@ -1037,21 +983,38 @@ export default function App() {
                       sound.playBlip(700);
                       setDashboardView('command-network');
                     }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       dashboardView === 'command-network'
                         ? 'bg-slate-900 text-white shadow-xs'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                     }`}
                   >
                     <span>🌐</span>
-                    <span>National Radar Command</span>
+                    <span>Radar Command</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      sound.playBlip(700);
+                      setDashboardView('bulletin');
+                    }}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                      dashboardView === 'bulletin'
+                        ? 'bg-sky-600 text-white shadow-xs font-black'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                    }`}
+                  >
+                    <span>🌤️</span>
+                    <span>Mausam & Trainee Lab</span>
+                    <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-emerald-500 text-white font-mono font-bold">
+                      IMD LIVE
+                    </span>
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-500 px-2">
-                  <span>Learner</span>
-                  <span>•</span>
-                  <span>MoES India</span>
+                <div className="hidden lg:flex items-center gap-2 text-xs text-slate-500 font-medium px-3">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-mono text-[11px]">IMD Command Active</span>
                 </div>
               </div>
 
@@ -1400,6 +1363,20 @@ export default function App() {
                   )}
                 </>
               )}
+
+              {/* View 5: National Meteorological Weather Bulletin & Trainee Lab Dashboard */}
+              {dashboardView === 'bulletin' && (
+                <div className="space-y-4 animate-in fade-in duration-200">
+                  <WeatherBulletinDashboard
+                    onAwardXP={handleAwardXP}
+                    onOpenRadarSim={() => {
+                      setActiveNav('trainees');
+                      setActiveTab('competency');
+                      setCompetencySubTab('simulator');
+                    }}
+                  />
+                </div>
+              )}
             </div>
           )}
 
@@ -1668,6 +1645,27 @@ export default function App() {
                 </button>
 
                 <button
+                  onClick={() => setCompetencySubTab('forecasting-lab')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    competencySubTab === 'forecasting-lab'
+                      ? isBright
+                        ? 'bg-sky-600 text-white shadow-xs font-black'
+                        : 'bg-sky-500/20 text-sky-300 border border-sky-500/40 font-black'
+                      : isBright
+                        ? 'text-sky-800 bg-sky-50 hover:bg-sky-100 font-bold'
+                        : 'text-sky-400 hover:bg-slate-800'
+                  }`}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span>⚡</span>
+                    <span>Trainee Forecasting Lab</span>
+                    <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-600 font-bold">
+                      MAUSAM
+                    </span>
+                  </span>
+                </button>
+
+                <button
                   onClick={() => setCompetencySubTab('arena')}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     competencySubTab === 'arena'
@@ -1878,6 +1876,15 @@ export default function App() {
                 onUpdateProfile={setStudentProfile}
                 onAwardXP={handleAwardXP}
                 onClose={() => setCompetencySubTab('matrix')}
+              />
+            )}
+
+            {/* Sub-Tab 4: Trainee Weather Forecasting Lab (Mausam Nowcasts, Tephigram, Synoptic Decoder) */}
+            {competencySubTab === 'forecasting-lab' && (
+              <WeatherForecastingTraineeSuite
+                onAwardXP={handleAwardXP}
+                onOpenRadarSim={() => setCompetencySubTab('simulator')}
+                isEmbedded={true}
               />
             )}
           </div>
@@ -2309,6 +2316,24 @@ export default function App() {
         onAwardXP={handleAwardXP}
       />
 
+      {/* 12. Operations & Tools Hub Modal */}
+      <ToolsOperationsModal
+        isOpen={isToolsModalOpen}
+        onClose={() => setIsToolsModalOpen(false)}
+        currentRole={currentRole}
+        onExportCSV={handleExportReport}
+        onOpenSkillsMatrix={() => setIsCompetencyMatrixOpen(true)}
+        onOpenRadarDrill={() => setIsCrisisDrillOpen(true)}
+        onOpenUploadLecture={() => setIsUploadLectureOpen(true)}
+        onOpenUploadStudyMaterial={() => {
+          setActiveTab('knowledge');
+          setKnowledgeSubTab('hub');
+          setIsUploadStudyMaterialOpen(true);
+        }}
+        onSwitchRole={handleSwitchRole}
+        onRequestClearance={handleRequestAdminClearance}
+      />
+
       {/* Floating Chat & Anonymous Lounge Action Button (Inside Cockpit, Not on Landing Homepage) */}
       <button
         type="button"
@@ -2316,7 +2341,7 @@ export default function App() {
           sound.playBlip(750);
           setIsChatOpen((prev) => !prev);
         }}
-        className={`fixed bottom-6 right-6 z-40 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 font-bold text-xs transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer ${
+        className={`fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-40 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-xl flex items-center gap-2 sm:gap-2.5 font-bold text-xs transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer min-h-[44px] ${
           isBright
             ? 'bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white shadow-indigo-200 hover:shadow-indigo-300'
             : 'bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 text-white shadow-[0_0_25px_rgba(99,102,241,0.4)]'
@@ -2332,6 +2357,128 @@ export default function App() {
           + Anonymous
         </span>
       </button>
+
+      {/* Mobile Bottom Navigation Bar (md:hidden) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-sky-200/90 px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_25px_rgba(0,0,0,0.08)]">
+        {/* Home */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveNav('home');
+            setActiveTab('dashboard');
+            setDashboardView('ocean');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            activeNav === 'home' && activeTab === 'dashboard' && dashboardView !== 'bulletin'
+              ? 'text-sky-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Home className={`w-5 h-5 ${activeNav === 'home' && activeTab === 'dashboard' && dashboardView !== 'bulletin' ? 'text-sky-600 stroke-[2.5]' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Home</span>
+        </button>
+
+        {/* Weather Bulletin */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveNav('weather-bulletin');
+            setActiveTab('dashboard');
+            setDashboardView('bulletin');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            activeNav === 'weather-bulletin' || (activeTab === 'dashboard' && dashboardView === 'bulletin')
+              ? 'text-sky-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <CloudRain className={`w-5 h-5 ${activeNav === 'weather-bulletin' || (activeTab === 'dashboard' && dashboardView === 'bulletin') ? 'text-sky-600 stroke-[2.5]' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Bulletin</span>
+        </button>
+
+        {/* Courses */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveNav('courses');
+            setActiveTab('training');
+            setTrainingSubTab('courses');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            activeTab === 'training'
+              ? 'text-sky-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <BookOpen className={`w-5 h-5 ${activeTab === 'training' ? 'text-sky-600 stroke-[2.5]' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Courses</span>
+        </button>
+
+        {/* Doppler Radar Sim */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveNav('trainees');
+            setActiveTab('competency');
+            setCompetencySubTab('simulator');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            activeTab === 'competency' && competencySubTab === 'simulator'
+              ? 'text-sky-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Radio className={`w-5 h-5 ${activeTab === 'competency' && competencySubTab === 'simulator' ? 'text-sky-600 stroke-[2.5]' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Radar</span>
+        </button>
+
+        {/* Quests */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setActiveNav('quests');
+            setActiveTab('competency');
+            setCompetencySubTab('arena');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            activeNav === 'quests' || (activeTab === 'competency' && competencySubTab === 'arena')
+              ? 'text-amber-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <Zap className={`w-5 h-5 ${activeNav === 'quests' || (activeTab === 'competency' && competencySubTab === 'arena') ? 'text-amber-500 fill-amber-400' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Quests</span>
+        </button>
+
+        {/* Profile / Rank */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setIsStudentProfileModalOpen(true);
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] cursor-pointer ${
+            isStudentProfileModalOpen
+              ? 'text-sky-600 font-extrabold'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <User className={`w-5 h-5 ${isStudentProfileModalOpen ? 'text-sky-600 stroke-[2.5]' : 'text-slate-500'}`} />
+          <span className="text-[10px] font-bold mt-0.5">Rank</span>
+        </button>
+
+        {/* Menu (Sidebar Drawer) */}
+        <button
+          onClick={() => {
+            sound.playBlip(600);
+            setIsMobileMenuOpen(true);
+          }}
+          className="flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-w-[48px] min-h-[44px] text-slate-500 hover:text-slate-800 cursor-pointer"
+          aria-label="Open Navigation Drawer"
+        >
+          <Menu className="w-5 h-5 text-slate-600" />
+          <span className="text-[10px] font-bold mt-0.5">Menu</span>
+        </button>
+      </nav>
 
       {/* Toast Notification */}
       {toastMessage && (

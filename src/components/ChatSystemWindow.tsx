@@ -360,16 +360,16 @@ export const ChatSystemWindow: React.FC<ChatSystemWindowProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-extrabold tracking-tight">
+              <h3 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
                 IMD Faculty & Cadet Communication Hub
               </h3>
               <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
-                isBright ? 'bg-sky-100 text-sky-800' : 'bg-cyan-950 text-cyan-300 border border-cyan-800/60'
+                isBright ? 'bg-sky-100 text-sky-950 font-black' : 'bg-cyan-950 text-cyan-300 border border-cyan-800/60'
               }`}>
                 {currentRole} Mode
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] text-slate-800 dark:text-slate-200 font-semibold">
               Direct faculty contact, anonymous candidate lounge & feedback channel
             </p>
           </div>
